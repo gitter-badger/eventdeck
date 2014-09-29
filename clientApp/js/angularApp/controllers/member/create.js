@@ -2,7 +2,7 @@
 
 theToolController.controller("CreateMemberController", function ($rootScope, $scope, $http, $location, $routeParams, MemberFactory) {
 
-  $rootScope.update.timeout(runController);
+ $rootScope.update.timeout(runController);
 
   function runController(){
 
@@ -14,7 +14,6 @@ theToolController.controller("CreateMemberController", function ($rootScope, $sc
       var memberData = this.formData;
 
       MemberFactory.Member.create(memberData, function(response) {
-        //console.log(response)
         if(response.error) {
           $scope.error = response.error;
         } else {

@@ -13,3 +13,4 @@ require('./communication');
 require('./tag');
 require('./subscription');
 require('./admin');
+require('./session');

@@ -3,14 +3,16 @@ var mongoose = require('mongoose');
 var sessionSchema = new mongoose.Schema({
   id: String,
   name: String,
-  kind: String,
-  thread: String,
+  kind: String, 
+  img: String,
   place: String,
   description: String,
   speakers: [{
-    name: String,
-    position: String
+    id: String, //for main speakers
+    name: String, //for other speakers
+    position: String, //for other speakers
   }],
+  companies: [String],
   date: { type: Date },
   duration: { type: Date },
   updated: { type: Date }
@@ -24,7 +26,7 @@ sessionSchema.statics.del = function (id, cb) {
   this.remove({ _id: id }, cb);
 };
 
-sessionSchema.statics.findByThread = function (id, cb) {
+sessionSchema.statics.findByThread = function (id, cb) { //TODO!
   this.find({ thread: id }, cb);
 };
 
