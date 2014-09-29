@@ -34,3 +34,19 @@ sftp-config.json
 chromeExtension.*
 
 phonegap/platforms
+
+public/css/style.css
+
+public/index.html
+
+public/views/company/card.html
+
+public/views/member/view.html
+
+public/views/speaker/card.html
+
+serverApp/resources/member/update.js
+
+syncDev.sh
+
+syncMaster.sh
