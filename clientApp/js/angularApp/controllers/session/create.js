@@ -30,10 +30,17 @@ theToolController
     });
   };
 
-  $scope.removeSpeaker = function(index) {
-     //$scope.speakersList.splice(index, 1);
-     var idx = $scope.speakersList.indexOf(index);
-     $scope.speakersList.splic(idx,1);
+  $scope.removeSpeaker = function(speaker) {
+    var index = -1; 
+    console.log(speaker);
+    for (var i = 0; i < $scope.speakersList.length; i++) {
+        if ($scope.speakersList[i].id == speaker.id && $scope.speakersList[i].name == speaker.name && $scope.speakersList[i].position == speaker.position) {
+            index = i;
+        }
+    }
+	if(index > -1){
+    	$scope.speakersList.splice(index,1);
+	}
   }
 
   $scope.addCompany = function() {
