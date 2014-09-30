@@ -1,119 +1,120 @@
 <div class="" id="createModal">
-
   <div class="ink-grid">
-      <div class="column-group horizontal-gutters">
-        <div class="all-100">
-          <h1  ng-click="start()">Create {{formData.name}}</h1>
-          {{formData.kind}} {{'@' + formData.place}} {{formData.inicialDate}}
-          <div class="ink-alert basic success" ng-show="message">
-            <!--<button class="ink-dismiss">&times;</button>-->
-            <p><strong>Sucess!</strong>
-              {{message}}
-            </p>
-          </div>
-          <div class="ink-alert basic error" ng-show="error">
-            <button class="ink-dismiss">&times;</button>
-            <p><strong>Error!</strong>
-              {{error}}
-            </p>
-          </div>
-
+    <div class="column-group horizontal-gutters">
+      <div class="all-100">
+        <h1  ng-click="start()">Create {{formData.name}}</h1>
+        {{formData.kind}} {{'@' + formData.place}} {{formData.inicialDate}}
+        <div class="ink-alert basic success" ng-show="message">
+          <!--<button class="ink-dismiss">&times;</button>-->
+          <p><strong>Sucess!</strong>
+            {{message}}
+          </p>
+        </div>
+        <div class="ink-alert basic error" ng-show="error">
+          <button class="ink-dismiss">&times;</button>
+          <p><strong>Error!</strong>
+            {{error}}
+          </p>
         </div>
       </div>
-
-      <form class="ink-form" ng-submit="submit()" unsaved-warning-form>
-        <div class="column-group gutters">
-          <div class="all-30 medium-30 small-100 tiny-100">
-            <div class="control-group">
-              <label for="name">Name</label>
-              <div class="control">
-                <input id="name" ng-model="formData.name" type="text" resettable>
-              </div>
-            </div>
-             <div class="control-group">
-              <label for="name">Kind</label>
-              <div class="control">
-                <select id="kind" ng-model="formData.kind" ng-options="k.name as k.name for k in sessions | orderBy: 'toString()'" resettable></select>
-              </div>
-            </div>
-            <div class="control-group">
-              <label for="img">Image Url</label>
-              <div class="control">
-                <input id="img" ng-model="formData.img" type="text" resettable>
-              </div>
-              <img ng-show="formData.img" src="{{formData.img}}" width="100%" />
+    </div>
+    <form class="ink-form" ng-submit="submit()" unsaved-warning-form>
+      <div class="column-group gutters">
+        <div class="all-30 medium-30 small-100 tiny-100">
+          <div class="control-group">
+            <label for="name">Name</label>
+            <div class="control">
+              <input id="name" ng-model="formData.name" type="text" resettable>
             </div>
           </div>
-          <div class="all-40 medium-40 small-100 tiny-100">
-            <div class="control-group"> <!--// TODO Button to add more speakers-->
-              <label for="name">Speakers</label> 
-              <div class="control">
-                 <a><input type="text" ng-model="formData.speakerName" ng-change="searchBoxChanged()" placeholder="Speaker Name"></a>
-                    <ul ng-if="search.name && search.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px;">
-                      <li ng-show="search.name" ng-repeat="speaker in speakers | filter:search:strict"><a href="#/speaker/{{speaker.id}}"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a></li>
-                    </ul>
-              
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="control">
-                <input id="speakerPosition" placeholder="Speaker Position" ng-model="formData.speakers" type="text" resettable>
-              </div>
-            </div>
-            <div class="control-group">
-              <label for="name">Companies</label> <!--// TODO Button to add more companies-->
-              <div class="control">
-                <input id="name" ng-model="formData.companies" type="text" resettable>
-              </div>
-            </div>
-            <div class="control-group">
-              <label for="description">Description</label>
-              <div class="control">
-                <textarea id="description" ng-model="formData.description" type="text" rows="8" resettable></textarea>
-              </div>
-            </div>
-            <div class="control-group">
-              <input type="submit" id="submit" value="Submit" class="ink-button green" />
-              <a class="ink-button orange" href="#/speakers"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a>
+          <div class="control-group">
+            <label for="kind">Kind</label>
+            <div class="control">
+              <select id="kind" ng-model="formData.kind" ng-options="k.name as k.name for k in sessions | orderBy: 'toString()'" resettable></select>
             </div>
           </div>
-          <div class="all-30 medium-30 small-100 tiny-100">
-            <div class="control-group">
-              <label for="name">Place</label>
-              <div class="control">
-                <input id="place" ng-model="formData.place" type="text" resettable>
-              </div>
+          <div class="control-group">
+            <label for="img">Image Url</label>
+            <div class="control">
+              <input id="img" ng-model="formData.img" type="text" resettable>
             </div>
-            <div class="column-group horizontal-gutters">
-              <div class="all-50 medium-50 small-50 tiny-50">
-                <div class="control-group">
-                  <label for="name">Inicial Date</label>
-                  <div class="ink-form">
-                    <div class="control-group column-group no-margin">
-                      <div class="control">
-                          <input type="text" ng-model="formData.inicialDate" id="inicialDatePicker" class="ink-datepicker" resettable/>
-                      </div>
+            <img ng-show="formData.img" src="{{formData.img}}" width="100%" />
+          </div>
+        </div>
+        <div class="all-40 medium-40 small-100 tiny-100">
+          <div class="control-group">
+            <label for="speakers">Speakers</label><!--// TODO Button to add more speakers-->
+            <div class="control">
+              <a><input type="text" ng-model="searchSpeaker.name" id="speakers" placeholder="Speaker Name" style="width: 100%;"></a>
+              <ul ng-if="searchSpeaker.name && searchSpeaker.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;" >
+                <li ng-show="searchSpeaker.name" ng-repeat="speaker in speakers | filter:searchSpeaker.name:strict">
+                  <a ng-click="speakerList[0].id = {{speaker.id}}"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="control">
+              <input id="speakerPosition" placeholder="Speaker Position" ng-model="formData.speakers" type="text" resettable>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="companies">Companies</label> <!--// TODO Button to add more companies-->
+            <div class="control">
+              <a><input type="text" ng-model="searchCompany.name" id="companies" style="width: 100%;"></a>
+              <ul ng-if="searchCompany.name && searchCompany.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;" >
+                <li ng-show="searchCompany.name" ng-repeat="company in companies | filter:searchCompany.name:strict">
+                  <a ng-click="companyList[0].id = {{company.id}}"><img ng-src="{{company.img}}" style="height:20px; max-width:40px">{{company.name}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="description">Description</label>
+            <div class="control">
+              <textarea id="description" ng-model="formData.description" type="text" rows="8" resettable></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <input type="submit" id="submit" value="Submit" class="ink-button green"/>
+            <a class="ink-button orange" href="#/speakers"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a>
+          </div>
+        </div>
+        <div class="all-30 medium-30 small-100 tiny-100">
+          <div class="control-group">
+            <label for="place">Place</label>
+            <div class="control">
+              <input id="place" ng-model="formData.place" type="text" resettable>
+            </div>
+          </div>
+          <div class="column-group horizontal-gutters">
+            <div class="all-50 medium-50 small-50 tiny-50">
+              <div class="control-group">
+                <label for="inicialDatePicker">Inicial Date</label>
+                <div class="ink-form">
+                  <div class="control-group column-group no-margin">
+                    <div class="control">
+                      <input type="text" ng-model="formData.inicialDate" id="inicialDatePicker" class="ink-datepicker" resettable/>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="all-50 medium-50 small-50 tiny-50">
-                  <div class="column-group">
-                    <label for="name">Final Date</label>
-                      <div class="ink-form">
-                        <div class="control-group column-group no-margin">
-                            <div class="control">
-                                <input type="text" ng-model="formData.finalDate" id="finalDatePicker" class="ink-datepicker" />
-                            </div>
-                        </div>
-                      </div>
+            </div>
+            <div class="all-50">
+              <div class="control-group">
+                <label for="finalDatePicker">Final Date</label>
+                <div class="ink-form">
+                  <div class="control-group column-group no-margin">
+                    <div class="control">
+                      <input type="text" ng-model="formData.finalDate" id="finalDatePicker" class="ink-datepicker" />
+                    </div>
                   </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
-    <script>
-    </script>
+      </div>
+    </form>
+  </div>
 </div>

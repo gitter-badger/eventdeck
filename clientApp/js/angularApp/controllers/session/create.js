@@ -3,22 +3,29 @@
 var inicialDatePicker, finalDatePicker;
 
 theToolController
-  .controller('CreateSessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory, SpeakerFactory) {
+  .controller('CreateSessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory, SpeakerFactory, CompanyFactory) {
 	  
 	var options = require('./../../../../../options.js');
 	$scope.sessions = options.session.kind;
-	$scope.speakers = [{
-    id:"",
-    name:"",
-    position: ""
-  }];
-  $scope.companies = [{
-    id : ""
-  }];
+	$scope.searchSpeaker = {};
+	$scope.searchCompany = {};
+	$scope.speakerList = [{
+	    id:"",
+	    name:"",
+	    position: ""
+  	}];
+	$scope.companyList = [{
+		id : ""
+	}];
 
+	SpeakerFactory.Speaker.getAll(function(response) {
+	   $scope.speakers = response;
+	});
+
+	console.log($scope.speakers);
 
   $scope.addSpeaker = function() {
-    $scope.speakers.append({
+    $scope.speakerList.append({
       id:"",
       name:"",
       position: ""
@@ -26,11 +33,14 @@ theToolController
   };
 
   $scope.addCompany = function() {
-    $scope.companies.append({
+    $scope.companyList.append({
     id : ""
     })
   };
 
+  	$scope.speakerSearchboxChanged = function(){
+  		console.log($scope.searchSpeaker.name);
+  	}
 
 	var updateSpeakers = function(){
       SpeakerFactory.Speaker.getAll(function (speakers) {
