@@ -7,7 +7,30 @@ theToolController
 	  
 	var options = require('./../../../../../options.js');
 	$scope.sessions = options.session.kind;
-	$scope.speakers = [];
+	$scope.speakers = [{
+    id:"",
+    name:"",
+    position: ""
+  }];
+  $scope.companies = [{
+    id : ""
+  }];
+
+
+  $scope.addSpeaker = function() {
+    $scope.speakers.append({
+      id:"",
+      name:"",
+      position: ""
+    })
+  };
+
+  $scope.addCompany = function() {
+    $scope.companies.append({
+    id : ""
+    })
+  };
+
 
 	var updateSpeakers = function(){
       SpeakerFactory.Speaker.getAll(function (speakers) {
