@@ -12,7 +12,9 @@ var sessionSchema = new mongoose.Schema({
     name: String, //for other speakers
     position: String, //for other speakers
   }],
-  companies: [String],
+  companies: [{
+    id: String
+  }],
   date: { type: Date },
   duration: { type: Date },
   updated: { type: Date }

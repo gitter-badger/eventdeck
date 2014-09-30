@@ -7,53 +7,61 @@ theToolController
 	  
 	var options = require('./../../../../../options.js');
 	$scope.sessions = options.session.kind;
-	$scope.searchSpeaker = {};
-	$scope.searchCompany = {};
-	$scope.speakerList = [{
+	$scope.speakersList = [{
 	    id:"",
 	    name:"",
 	    position: ""
   	}];
-	$scope.companyList = [{
-		id : ""
+
+	$scope.companiesList = [{
+		id: "",
+    name: ""
 	}];
 
 	SpeakerFactory.Speaker.getAll(function(response) {
 	   $scope.speakers = response;
 	});
 
-	console.log($scope.speakers);
-
   $scope.addSpeaker = function() {
-    $scope.speakerList.append({
+    $scope.speakersList.push({
       id:"",
       name:"",
       position: ""
-    })
+    });
   };
 
+  $scope.removeSpeaker = function(index) {
+     //$scope.speakersList.splice(index, 1);
+     var idx = $scope.speakersList.indexOf(index);
+     $scope.speakersList.splic(idx,1);
+  }
+
   $scope.addCompany = function() {
-    $scope.companyList.append({
+    $scope.companiesList.append({
     id : ""
     })
   };
 
-  	$scope.speakerSearchboxChanged = function(){
-  		console.log($scope.searchSpeaker.name);
-  	}
+  $scope.printSpeakersListed = function(){
+  	console.log($scope.speakersList);
+  }
+
+  $scope.teste = function(speaker) {
+    console.log(speaker);
+  }
 
 	var updateSpeakers = function(){
-      SpeakerFactory.Speaker.getAll(function (speakers) {
-        $scope.speakers = speakers;
-      });
-    }
-
-   	updateSpeakers()
-	
-   	Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
-            inicialDatePicker = new DatePicker('#inicialDatePicker');
-            finalDatePicker = new DatePicker('#finalDatePicker');
+    SpeakerFactory.Speaker.getAll(function (speakers) {
+      $scope.speakers = speakers;
     });
+  }
+
+  updateSpeakers()
+	
+  Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
+    inicialDatePicker = new DatePicker('#inicialDatePicker');
+    finalDatePicker = new DatePicker('#finalDatePicker');
+  });
 });
         
 
