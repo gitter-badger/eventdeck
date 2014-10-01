@@ -1,74 +1,119 @@
 'use strict';
-   	
+
 var inicialDatePicker, finalDatePicker;
 
 theToolController
-  .controller('CreateSessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory, SpeakerFactory, CompanyFactory) {
-	  
-	var options = require('./../../../../../options.js');
-	$scope.sessions = options.session.kind;
-	$scope.speakersList = [{
-	    id:"",
-	    name:"",
-	    position: ""
-  	}];
+    .controller('CreateSessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory, SpeakerFactory, CompanyFactory) {
 
-	$scope.companiesList = [{
-		id: "",
-    name: ""
-	}];
+        var options = require('./../../../../../options.js');
+        $scope.sessions = options.session.kind;
+        $scope.speakersList = [{
+            id: "",
+            name: "",
+            position: ""
+        }];
 
-	SpeakerFactory.Speaker.getAll(function(response) {
-	   $scope.speakers = response;
-	});
+        $scope.test = [1,2,3,4]
+        $scope.companiesList = [{
+            id: "",
+            name: ""
+        }];
 
-  $scope.addSpeaker = function() {
-    $scope.speakersList.push({
-      id:"",
-      name:"",
-      position: ""
-    });
-  };
-
-  $scope.removeSpeaker = function(speaker) {
-    var index = -1; 
-    console.log(speaker);
-    for (var i = 0; i < $scope.speakersList.length; i++) {
-        if ($scope.speakersList[i].id == speaker.id && $scope.speakersList[i].name == speaker.name && $scope.speakersList[i].position == speaker.position) {
-            index = i;
+        $scope.date = {
+            inicialDate : {
+                day: "",
+                month: "",
+                year: "",
+                hours: "",
+                minutes: ""
+            },
+            finalDate: {
+                day: "",
+                month: "",
+                year: "",
+                hours: "",
+                minutes: ""
+            }
         }
-    }
-	if(index > -1){
-    	$scope.speakersList.splice(index,1);
-	}
-  }
 
-  $scope.addCompany = function() {
-    $scope.companiesList.append({
-    id : ""
-    })
-  };
+        $scope.dayList = [];
+        $scope.monthList = [];
+        $scope.yearList = [];
+        $scope.hoursList = [];
+        $scope.minutesList = [];
 
-  $scope.printSpeakersListed = function(){
-  	console.log($scope.speakersList);
-  }
+        var initDate = function() {
+            for(var i = 1; i <= 31; i++){
+                $scope.dayList.push(i);
+            }
+            for(var i = 1; i <= 12; i++){
+                $scope.monthList.push(i);
+            }
+            for(var i = 2014; i <= 2050; i++){
+                $scope.yearList.push(i);
+            }
+            for(var i = 0; i <= 23; i++){
+                $scope.hoursList.push(i);
+            }
+            for(var i = 0; i <= 59; i++){
+                $scope.minutesList.push(i);
+            }
+        };
 
-  $scope.teste = function(speaker) {
-    console.log(speaker);
-  }
+        initDate();
 
-	var updateSpeakers = function(){
-    SpeakerFactory.Speaker.getAll(function (speakers) {
-      $scope.speakers = speakers;
+        $scope.addSpeaker = function ()  {
+            $scope.speakersList.push({
+                id: "",
+                name: "",
+                position: ""
+            });
+        };
+
+        $scope.removeSpeaker = function (speaker) {
+            var testToRemove = function(el1, el2){
+                console.log("Testing Speaker");
+                if(el1.id == el2.id && el1.name == el2.name && el1.position == el2.position){
+                    return true;
+                }
+                return false;
+            }
+            removeElementFromList($scope.speakersList, speaker, testToRemove);
+        };
+
+        $scope.addCompany = function ()  {
+            $scope.companiesList.push({
+                id: "",
+                name: ""
+            })
+        };
+
+        $scope.removeCompany = function (company) {
+            var testToRemove = function(el1, el2){
+                if(el1.id == el2.id && el1.name == el2.name){
+                    return true;
+                }
+                return false;
+            }
+            removeElementFromList($scope.companiesList, company, testToRemove);
+        };
+
+        $scope.teste = function (speaker) {
+            console.log(speaker);
+        };
+
+        var removeElementFromList = function(list, el, testFunction){
+            if(confirm("Are you sure you want to remove?")){
+                var index = -1;
+                for (var i = 0; i < list.length; i++) {
+                    if (testFunction(list[i], el)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > -1) {
+                    list.splice(index, 1);
+                }  
+            }  
+        }
     });
-  }
-
-  updateSpeakers()
-	
-  Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
-    inicialDatePicker = new DatePicker('#inicialDatePicker');
-    finalDatePicker = new DatePicker('#finalDatePicker');
-  });
-});
-        
-
