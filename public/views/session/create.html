@@ -50,28 +50,28 @@
           <div class="column-group horizontal-gutters">
             <div class="all-100 medium-100 small-100 tiny-100">
               <div class="control-group">
-                <h3><label for="inicialDate">Inicial Date</label></h3>
+                <h3><label for="initialDate">Initial Date</label></h3>
                 <div class="control">
                   <div class="all-33 medium-33 small-100 tiny-100">
                     <span>Day: </span>
-                    <select id="day" ng-model="date.inicialDate.day" ng-options="day as day for day in dayList" resettable></select>
+                    <select id="day" ng-model="date.initialDate.day" ng-change="checkInitialDay()" ng-options="day as day for day in dayList" resettable></select>
                   </div>
                   <div class="all-33 medium-33 small-100 tiny-100">
                     <span>Month: </span>
-                    <select id="month" ng-model="date.inicialDate.month" ng-options="month as month for month in monthList" resettable></select>
+                    <select id="month" ng-model="date.initialDate.month" ng-change="checkInitialMonth()" ng-options="month as month for month in monthList" resettable></select>
                   </div>
                   <div class="all-33 medium-33 small-100 tiny-100">
                     <span>Year: </span>
-                    <select id="year" ng-model="date.inicialDate.year" ng-options="year as year for year in yearList" resettable></select>
+                    <select id="year" ng-model="date.initialDate.year" ng-change="checkInitialYear()" ng-options="year as year for year in yearList" resettable></select>
                   </div>
                 </div>
               </div>
             </div>
             <div class="all-100">
               <span>Hours: </span>
-              <select id="hours" ng-model="date.inicialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+              <select id="hours" ng-model="date.initialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
               <span class="left-space">Minutes: </span>
-              <select id="minutes" ng-model="date.inicialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+              <select id="minutes" ng-model="date.initialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
             </div>
             <div class="all-100 top-space">
               <div class="control-group">
@@ -79,24 +79,24 @@
                 <div class="control"> 
                   <div class="all-33 medium-33 small-100 tiny-100">
                     <span>Day: </span>
-                    <select id="day" ng-model="date.finalDate.day" ng-options="day as day for day in dayList" resettable></select>
+                    <select id="day" ng-model="date.finalDate.day" ng-change="checkFinalDay()" ng-options="day as day for day in dayList" resettable></select>
                   </div>
                   <div class="all-33 medium-33 small-100 tiny-100">
                     <span>Month: </span>
-                    <select id="month" ng-model="date.finalDate.month" ng-options="month as month for month in monthList" resettable></select>
+                    <select id="month" ng-model="date.finalDate.month" ng-change="checkFinalMonth()" ng-options="month as month for month in monthList" resettable></select>
                   </div>
                   <div class="all-33 medium-33 small-100 tiny-100">
                      <span>Year: </span>
-                    <select id="year" ng-model="date.finalDate.year" ng-options="year as year for year in yearList" resettable></select>
+                    <select id="year" ng-model="date.finalDate.year" ng-change="checkFinalYear()" ng-options="year as year for year in yearList" resettable></select>
                   </div>
                 </div>
               </div>
             </div>
             <div class="all-100">
                 <span>Hours: </span>
-                <select id="hours" ng-model="date.inicialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+                <select id="hours" ng-model="date.finalDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
                 <span class="left-space">Minutes: </span>
-                <select id="minutes" ng-model="date.inicialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+                <select id="minutes" ng-model="date.finalDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
             </div>
             <div class="all-100 top-space">
               <div class="control-group">
@@ -109,7 +109,7 @@
           <div class="all-100 medium-100 small-100 tiny-100">
             <div class="control-group">
               <input type="submit" id="submit" value="Submit" class="ink-button green"/>
-              <a class="ink-button orange" href="#/speakers"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a>
+              <a class="ink-button orange" href="#/"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a> <!--TODO-->
             </div>
           </div>
           </div>
@@ -121,26 +121,15 @@
               <div class="all-100 medium-100 small-100 tiny-100">
               <nav class="ink-navigation">
                 <ul class="menu horizontal">
-                  <!--<li class="control-group">
-                    <label for="speakers{{$index + 1}}">Speaker #{{$index + 1}}</label>
-                    <div class="control">
-                      <a><input type="text" ng-model="speakerListed.name" ng-change="show = true" id="speakers{{$index + 1}}" placeholder="Speaker name" style="background: rgba(0,0,0,0); padding-left: 0px; padding-right: 0px; cursor: default; width: 100%"></a>
-                      <ul ng-if="speakerListed.name && speakerListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
-                        <li ng-show="show" ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
-                          <a ng-click="speakerListed.id = speaker.id; speakerListed.name = speaker.name; show = false;"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>-->
                   <li style="width:100%;">
                     <div class="control-group">
                       <div class="control">
-                      <input type="text" ng-model="speakerListed.name" ng-change="show = true" id="speakers{{$index + 1}}" placeholder="Speaker name">
+                      <input type="text" ng-model="speakerListed.name" ng-change="show($index)" ng-click ="show($index)" id="speakers{{$index + 1}}" placeholder="Speaker name">
                       </div>
                     </div>
-                    <ul class="submenu" ng-if="speakerListed.name && speakerListed.name.length > 1">
-                        <li ng-show="show" ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
-                          <a ng-click="speakerListed.id = speaker.id; speakerListed.name = speaker.name; show = false;"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
+                    <ul class="submenu grey" ng-if="speakerListed.name && speakerListed.name.length > 1" style="display: {{display ? 'block' : 'none'}};">
+                        <li ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
+                          <a ng-click="addSpeaker($index, speaker.name, speaker.id)"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
                         </li>
                     </ul>
                   </li>
@@ -154,16 +143,16 @@
                   </div>
                 </div>
               </div>
-              <div class="ink-button red push-right" style="width: 40px;" ng-click="removeSpeaker(speakerListed)"><i class="fa fa-times"></i></div>
+              <div class="ink-button red push-right" style="width: 40px;" ng-click="removeSpeakerRow(speakerListed)"><i class="fa fa-times"></i></div>
             </div>
-            <div class="ink-button green push-right" style="width:40px;" ng-click="addSpeaker()"><i class="fa fa-plus"></i></div>
+            <div class="ink-button green push-right" style="width:40px;" ng-click="addSpeakerRow()"><i class="fa fa-plus"></i></div>
           </div>
           <div class="all-100 top-space">
             <h3><label>Companies</label></h3>
             <div ng-repeat="companyListed in companiesList">
             <div class="all-100 medium-100 small-100 tiny-100">
                 <div class="control-group">
-                  <label for="company{{$index + 1}}">Company #{{$index + 1}}</label><!--// TODO Button to add more speakers-->
+                  <label for="company{{$index + 1}}"></label>
                   <div class="control">
                     <a><input type="text" ng-model="companyListed.name" ng-change="show = true" id="company{{$index + 1}}" placeholder="Company name" style="width: 100%;"></a>
                     <ul ng-if="companyListed.name && companyListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
@@ -174,9 +163,9 @@
                   </div>
                 </div>
               </div>
-              <button class="ink-button red push-right" style="width: 40px;" ng-click="removeCompany(companyListed)"><span class="fa fa-times"></span></button>
+              <button class="ink-button red push-right" style="width: 40px;" ng-click="removeCompanyRow(companyListed)"><span class="fa fa-times"></span></button>
             </div>
-            <button class="ink-button green push-right" style="width:40px;" ng-click="addCompany()"><span class="fa fa-plus"></span></button>  
+            <button class="ink-button green push-right" style="width:40px;" ng-click="addCompanyRow()"><span class="fa fa-plus"></span></button>  
           </div>
         </div>
       </div>

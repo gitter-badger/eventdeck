@@ -15,8 +15,8 @@ var sessionSchema = new mongoose.Schema({
   companies: [{
     id: String
   }],
-  date: { type: Date },
-  duration: { type: Date },
+  initialDate: { type: Date },
+  finalDate: { type: Date },
   updated: { type: Date }
 });
 
