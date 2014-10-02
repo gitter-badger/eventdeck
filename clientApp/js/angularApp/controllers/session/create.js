@@ -1,12 +1,13 @@
 'use strict';
 
-var inicialDatePicker, finalDatePicker;
-
 theToolController
     .controller('CreateSessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory, SpeakerFactory, CompanyFactory) {
 
         var options = require('./../../../../../options.js');
-
+        var initialDatePicker;
+        var finalDatePicker;
+        $scope.hoursList = [];
+        $scope.minutesList = [];
         $scope.sessions = options.session.kind;
         $scope.speakersList = [{
             id: "",
@@ -21,37 +22,18 @@ theToolController
 
         $scope.date = {
             initialDate : {
-                day: "",
-                month: "",
-                year: "",
                 hours: "",
                 minutes: ""
             },
             finalDate: {
-                day: "",
-                month: "",
-                year: "",
                 hours: "",
                 minutes: ""
             }
         }
-
-        $scope.dayList = [];
-        $scope.monthList = [];
-        $scope.yearList = [];
-        $scope.hoursList = [];
-        $scope.minutesList = [];
+        $scope.displaySpeakersList = [false];
+        $scope.displayCompaniesList = [false];
 
         var initDate = function() {
-            for(var i = 1; i <= 31; i++){
-                $scope.dayList.push(i);
-            }
-            for(var i = 1; i <= 12; i++){
-                $scope.monthList.push(i);
-            }
-            for(var i = 2014; i <= (new Date().getFullYear() + 2); i++){
-                $scope.yearList.push(i);
-            }
             for(var i = 0; i <= 23; i++){
                 $scope.hoursList.push(i);
             }
@@ -68,6 +50,7 @@ theToolController
                 name: "",
                 position: ""
             });
+            $scope.displaySpeakersList.push(false);
         };
 
         $scope.removeSpeakerRow = function (speaker) {
@@ -78,11 +61,11 @@ theToolController
                 }
                 return false;
             }
-            removeElementFromList($scope.speakersList, speaker, testToRemove);
+            removeElementFromList($scope.speakersList, $scope.displaySpeakersList, speaker, testToRemove);
         };
 
         $scope.addSpeaker = function(idx, name, id) {
-            $scope.display = false;
+            $scope.displaySpeakersList[idx] = false;
 
             $scope.speakersList[idx].name = name;
             $scope.speakersList[idx].id = id;
@@ -93,6 +76,7 @@ theToolController
                 id: "",
                 name: ""
             })
+            $scope.displayCompaniesList.push(false);
         };
 
         $scope.removeCompanyRow = function (company) {
@@ -102,10 +86,13 @@ theToolController
                 }
                 return false;
             }
-            removeElementFromList($scope.companiesList, company, testToRemove);
+            removeElementFromList($scope.companiesList, $scope.displayCompaniesList, company, testToRemove);
         };
 
         $scope.submit = function() {
+
+            //TODO CHECK DATES
+
             var sessionData = {
                 name: $scope.formData.name,
                 kind: $scope.formData.kind,
@@ -114,8 +101,8 @@ theToolController
                 description: $scope.formData.description,
                 speakers: $scope.speakersList,
                 companies: $scope.companiesList,
-                initialDate: new Date($scope.date.initialDate.year, $scope.date.initialDate.month - 1, $scope.date.initialDate.day, $scope.date.initialDate.hours, $scope.date.initialDate.minutes),
-                finalDate: new Date($scope.date.finalDate.year, $scope.date.finalDate.month - 1, $scope.date.finalDate.day, $scope.date.finalDate.hours, $scope.date.finalDate.minutes), 
+                initialDate: new Date(initialDatePicker.getFullYear(), initialDatePicker.getMonth(), initialDatePicker.getDay(), $scope.date.initialDate.hours, $scope.date.initialDate.minutes),
+                finalDate: new Date(finalDatePicker.getFullYear(), finalDatePicker.getMonth(), finalDatePicker.getDay(), $scope.date.finalDate.hours, $scope.date.finalDate.minutes), 
             } 
 
             SessionFactory.Session.create(sessionData, function(response) {
@@ -138,11 +125,11 @@ theToolController
             console.log("teste");
         };
 
-        $scope.show = function(idx) {
-            $scope.display = ($scope.speakersList[idx].name ?  true : false);
+        $scope.showSpeakers = function(idx) {
+            $scope.displaySpeakersList[idx] = ($scope.speakersList[idx].name ?  true : false);
         }
 
-        var removeElementFromList = function(list, el, testFunction){
+        var removeElementFromList = function(list, listDisplay ,el, testFunction){
             if(confirm("Are you sure you want to remove?")){
                 var index = -1;
                 for (var i = 0; i < list.length; i++) {
@@ -153,9 +140,15 @@ theToolController
                 }
                 if (index > -1) {
                     list.splice(index, 1);
+                    listDisplay.splice(index, 1);
                 }  
             }  
         }
+
+        Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function( Selector, DatePicker ){
+            initialDatePicker = new DatePicker( '#initialDate' );
+            finalDatePicker = new DatePicker('#finalDate');
+        });
         /*
         $scope.checkInitialDay = function(){
             console.log("checkin day")

@@ -52,17 +52,12 @@
               <div class="control-group">
                 <h3><label for="initialDate">Initial Date</label></h3>
                 <div class="control">
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Day: </span>
-                    <select id="day" ng-model="date.initialDate.day" ng-change="checkInitialDay()" ng-options="day as day for day in dayList" resettable></select>
-                  </div>
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Month: </span>
-                    <select id="month" ng-model="date.initialDate.month" ng-change="checkInitialMonth()" ng-options="month as month for month in monthList" resettable></select>
-                  </div>
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Year: </span>
-                    <select id="year" ng-model="date.initialDate.year" ng-change="checkInitialYear()" ng-options="year as year for year in yearList" resettable></select>
+                  <div class="ink-form">
+                    <div class="control-group column-group no-margin">
+                        <div class="control all-30">
+                            <input type="text" id="initialDate" class="ink-datepicker" />
+                        </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -77,18 +72,11 @@
               <div class="control-group">
                 <h3><label for="finalDate">Final Date</label></h3>
                 <div class="control"> 
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Day: </span>
-                    <select id="day" ng-model="date.finalDate.day" ng-change="checkFinalDay()" ng-options="day as day for day in dayList" resettable></select>
-                  </div>
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Month: </span>
-                    <select id="month" ng-model="date.finalDate.month" ng-change="checkFinalMonth()" ng-options="month as month for month in monthList" resettable></select>
-                  </div>
-                  <div class="all-33 medium-33 small-100 tiny-100">
-                     <span>Year: </span>
-                    <select id="year" ng-model="date.finalDate.year" ng-change="checkFinalYear()" ng-options="year as year for year in yearList" resettable></select>
-                  </div>
+                    <div class="control-group column-group no-margin">
+                        <div class="control all-30">
+                            <input type="text" id="finalDate" class="ink-datepicker" />
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -124,10 +112,10 @@
                   <li style="width:100%;">
                     <div class="control-group">
                       <div class="control">
-                      <input type="text" ng-model="speakerListed.name" ng-change="show($index)" ng-click ="show($index)" id="speakers{{$index + 1}}" placeholder="Speaker name">
+                      <input type="text" ng-model="speakerListed.name" ng-change="showSpeakers($index)" ng-click ="showSpeakers($index)" id="speakers{{$index + 1}}" placeholder="Speaker name">
                       </div>
                     </div>
-                    <ul class="submenu grey" ng-if="speakerListed.name && speakerListed.name.length > 1" style="display: {{display ? 'block' : 'none'}};">
+                    <ul class="submenu grey" ng-if="speakerListed.name && speakerListed.name.length > 1" style="display: {{displaySpeakersList[$index] ? 'block' : 'none'}};">
                         <li ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
                           <a ng-click="addSpeaker($index, speaker.name, speaker.id)"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
                         </li>
