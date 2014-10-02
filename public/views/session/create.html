@@ -41,69 +41,6 @@
           </div>
         </div>
         <div class="all-40 medium-40 small-100 tiny-100">
-          <div class="all-100 medium-100 small-100 tiny-100">
-           <h3><label>Speakers</label></h3>
-            <div ng-repeat="speakerListed in speakersList">
-            <div class="all-100 medium-100 small-100 tiny-100">
-                <div class="control-group">
-                  <label for="speakers{{$index + 1}}">Speaker #{{$index + 1}}</label><!--// TODO Button to add more speakers-->
-                  <div class="control">
-                    <a><input type="text" ng-model="speakerListed.name" ng-change="show = true" id="speakers{{$index + 1}}" placeholder="Speaker name" style="width: 100%;"></a>
-                    <ul ng-if="speakerListed.name && speakerListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
-                      <li ng-show="show" ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
-                        <a ng-click="speakerListed.id = speaker.id; speakerListed.name = speaker.name; show = false;"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="all-100 medium-100 small-100 tiny-100">
-                <div class="control-group">
-                  <div class="control">
-                    <input id="speakerPosition" placeholder="Speaker Position" ng-model="speakerListed.position" type="text" resettable>
-                  </div>
-                </div>
-              </div>
-                <button class="ink-button red push-right" style="width: 40px;" ng-click="removeSpeaker(speakerListed)"><span class="fa fa-times"></span></button>
-            </div>
-            <button class="ink-button green push-right" style="width:40px;" ng-click="addSpeaker()"><span class="fa fa-plus"></span></button>  
-          </div>
-          <div class="all-100 medium-100 small-100 tiny-100">
-            <h3><label>Companies</label></h3>
-            <div ng-repeat="companyListed in companiesList">
-            <div class="all-100 medium-100 small-100 tiny-100">
-                <div class="control-group">
-                  <label for="company{{$index + 1}}">Company #{{$index + 1}}</label><!--// TODO Button to add more speakers-->
-                  <div class="control">
-                    <a><input type="text" ng-model="companyListed.name" ng-change="show = true" id="company{{$index + 1}}" placeholder="Company name" style="width: 100%;"></a>
-                    <ul ng-if="companyListed.name && companyListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
-                      <li ng-show="show" ng-repeat="company in companies | filter:companyListed.name:strict">
-                        <a ng-click="companyListed.id = company.id; companyListed.name = company.name; show = false;"><img ng-src="{{company.img}}" style="height:20px; max-width:40px">{{company.name}}</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <button class="ink-button red push-right" style="width: 40px;" ng-click="removeCompany(companyListed)"><span class="fa fa-times"></span></button>
-            </div>
-            <button class="ink-button green push-right" style="width:40px;" ng-click="addCompany()"><span class="fa fa-plus"></span></button>  
-          </div>
-          <div class="all-100 medium-100 small-100 tiny-100">
-            <div class="control-group">
-              <label for="description">Description</label>
-              <div class="control">
-                <textarea id="description" ng-model="formData.description" type="text" rows="8" resettable></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="all-100 medium-100 small-100 tiny-100">
-            <div class="control-group">
-              <input type="submit" id="submit" value="Submit" class="ink-button green"/>
-              <a class="ink-button orange" href="#/speakers"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a>
-            </div>
-          </div>
-        </div>
-        <div class="all-30 medium-30 small-100 tiny-100">
           <div class="control-group">
             <label for="place">Place</label>
             <div class="control">
@@ -124,23 +61,19 @@
                     <select id="month" ng-model="date.inicialDate.month" ng-options="month as month for month in monthList" resettable></select>
                   </div>
                   <div class="all-33 medium-33 small-100 tiny-100">
-                     <span>Year: </span>
+                    <span>Year: </span>
                     <select id="year" ng-model="date.inicialDate.year" ng-options="year as year for year in yearList" resettable></select>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="all-100 medium-100 small-100 tiny-100">
-              <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Hours: </span>
-                    <select id="hours" ng-model="date.inicialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
-              </div>
-              <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Minutes: </span>
-                    <select id="minutes" ng-model="date.inicialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
-              </div>
+            <div class="all-100">
+              <span>Hours: </span>
+              <select id="hours" ng-model="date.inicialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+              <span class="left-space">Minutes: </span>
+              <select id="minutes" ng-model="date.inicialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
             </div>
-            <div class="all-100 medium-100 small-100 tiny-100">
+            <div class="all-100 top-space">
               <div class="control-group">
                 <h3><label for="finalDate">Final Date</label></h3>
                 <div class="control"> 
@@ -159,16 +92,91 @@
                 </div>
               </div>
             </div>
-            <div class="all-100 medium-100 small-100 tiny-100">
-              <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Hours: </span>
-                    <select id="hours" ng-model="date.finalDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
-              </div>
-              <div class="all-33 medium-33 small-100 tiny-100">
-                    <span>Minutes: </span>
-                    <select id="minutes" ng-model="date.finalDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+            <div class="all-100">
+                <span>Hours: </span>
+                <select id="hours" ng-model="date.inicialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+                <span class="left-space">Minutes: </span>
+                <select id="minutes" ng-model="date.inicialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+            </div>
+            <div class="all-100 top-space">
+              <div class="control-group">
+                <label for="description">Description</label>
+              <div class="control">
+              <textarea id="description" ng-model="formData.description" type="text" rows="8" resettable></textarea>
               </div>
             </div>
+          </div>
+          <div class="all-100 medium-100 small-100 tiny-100">
+            <div class="control-group">
+              <input type="submit" id="submit" value="Submit" class="ink-button green"/>
+              <a class="ink-button orange" href="#/speakers"><i class="fa fa-back"></i><i class="fa fa-reply" unsaved-warning-clear></i>  Go back...</a>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="all-30 medium-30 small-100 tiny-100">
+          <div class="all-100" style="">
+           <h3><label>Speakers</label></h3>
+            <div ng-repeat="speakerListed in speakersList">
+              <div class="all-100 medium-100 small-100 tiny-100">
+              <nav class="ink-navigation">
+                <ul class="menu horizontal">
+                  <!--<li class="control-group">
+                    <label for="speakers{{$index + 1}}">Speaker #{{$index + 1}}</label>
+                    <div class="control">
+                      <a><input type="text" ng-model="speakerListed.name" ng-change="show = true" id="speakers{{$index + 1}}" placeholder="Speaker name" style="background: rgba(0,0,0,0); padding-left: 0px; padding-right: 0px; cursor: default; width: 100%"></a>
+                      <ul ng-if="speakerListed.name && speakerListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
+                        <li ng-show="show" ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
+                          <a ng-click="speakerListed.id = speaker.id; speakerListed.name = speaker.name; show = false;"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>-->
+                  <li style="width:100%;">
+                    <div class="control-group">
+                      <div class="control">
+                      <input type="text" ng-model="speakerListed.name" ng-change="show = true" id="speakers{{$index + 1}}" placeholder="Speaker name">
+                      </div>
+                    </div>
+                    <ul class="submenu" ng-if="speakerListed.name && speakerListed.name.length > 1">
+                        <li ng-show="show" ng-repeat="speaker in speakers | filter:speakerListed.name:strict">
+                          <a ng-click="speakerListed.id = speaker.id; speakerListed.name = speaker.name; show = false;"><img ng-src="{{speaker.img}}" style="height:20px; max-width:40px">{{speaker.name}}</a>
+                        </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+              </div>
+              <div class="all-100 medium-100 small-100 tiny-100">
+                <div class="control-group">
+                  <div class="control">
+                    <input id="speakerPosition" placeholder="Speaker Position" ng-model="speakerListed.position" type="text" resettable>
+                  </div>
+                </div>
+              </div>
+              <div class="ink-button red push-right" style="width: 40px;" ng-click="removeSpeaker(speakerListed)"><i class="fa fa-times"></i></div>
+            </div>
+            <div class="ink-button green push-right" style="width:40px;" ng-click="addSpeaker()"><i class="fa fa-plus"></i></div>
+          </div>
+          <div class="all-100 top-space">
+            <h3><label>Companies</label></h3>
+            <div ng-repeat="companyListed in companiesList">
+            <div class="all-100 medium-100 small-100 tiny-100">
+                <div class="control-group">
+                  <label for="company{{$index + 1}}">Company #{{$index + 1}}</label><!--// TODO Button to add more speakers-->
+                  <div class="control">
+                    <a><input type="text" ng-model="companyListed.name" ng-change="show = true" id="company{{$index + 1}}" placeholder="Company name" style="width: 100%;"></a>
+                    <ul ng-if="companyListed.name && companyListed.name.length > 1" class="submenu" style="max-height:400px; overflow:auto; margin: 0px 20px 0px; list-style-type: none;">
+                      <li ng-show="show" ng-repeat="company in companies | filter:companyListed.name:strict">
+                        <a ng-click="companyListed.id = company.id; companyListed.name = company.name; show = false;"><img ng-src="{{company.img}}" style="height:20px; max-width:40px">{{company.name}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <button class="ink-button red push-right" style="width: 40px;" ng-click="removeCompany(companyListed)"><span class="fa fa-times"></span></button>
+            </div>
+            <button class="ink-button green push-right" style="width:40px;" ng-click="addCompany()"><span class="fa fa-plus"></span></button>  
           </div>
         </div>
       </div>
