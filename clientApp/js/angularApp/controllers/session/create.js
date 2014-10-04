@@ -6,18 +6,21 @@ theToolController
         var options = require('./../../../../../options.js');
         var initialDatePicker;
         var finalDatePicker;
+        var myValidator;
         $scope.hoursList = [];
         $scope.minutesList = [];
-        $scope.sessions = options.session.kind;
+        $scope.sessionsKind = options.session.kind;
         $scope.speakersList = [{
             id: "",
             name: "",
-            position: ""
+            position: "",
+            show: false
         }];
         
         $scope.companiesList = [{
             id: "",
-            name: ""
+            name: "",
+            show: false
         }];
 
         $scope.date = {
@@ -30,8 +33,6 @@ theToolController
                 minutes: ""
             }
         }
-        $scope.displaySpeakersList = [false];
-        $scope.displayCompaniesList = [false];
 
         var initDate = function() {
             for(var i = 0; i <= 23; i++){
@@ -48,35 +49,37 @@ theToolController
             $scope.speakersList.push({
                 id: "",
                 name: "",
-                position: ""
+                position: "",
+                show: false
             });
-            $scope.displaySpeakersList.push(false);
         };
 
         $scope.removeSpeakerRow = function (speaker) {
             var testToRemove = function(el1, el2){
-                console.log("Testing Speaker");
                 if(el1.id == el2.id && el1.name == el2.name && el1.position == el2.position){
                     return true;
                 }
                 return false;
             }
-            removeElementFromList($scope.speakersList, $scope.displaySpeakersList, speaker, testToRemove);
+            removeElementFromList($scope.speakersList, speaker, testToRemove);
         };
 
         $scope.addSpeaker = function(idx, name, id) {
-            $scope.displaySpeakersList[idx] = false;
-
             $scope.speakersList[idx].name = name;
             $scope.speakersList[idx].id = id;
+            $scope.speakersList[idx].show = false;
+        };
+
+        $scope.showSpeakers = function(idx) {
+            $scope.speakersList[idx].show = ($scope.speakersList[idx].name ?  true : false);
         };
 
         $scope.addCompanyRow = function ()  {
             $scope.companiesList.push({
                 id: "",
-                name: ""
+                name: "", 
+                show: false
             })
-            $scope.displayCompaniesList.push(false);
         };
 
         $scope.removeCompanyRow = function (company) {
@@ -86,12 +89,87 @@ theToolController
                 }
                 return false;
             }
-            removeElementFromList($scope.companiesList, $scope.displayCompaniesList, company, testToRemove);
+            removeElementFromList($scope.companiesList, company, testToRemove);
         };
+
+        $scope.addCompany = function(idx, name, id) {
+            $scope.companiesList[idx].name = name;
+            $scope.companiesList[idx].id = id;
+            $scope.companiesList[idx].show = false;
+        }
+
+        $scope.showCompanies = function(idx) {
+
+            $scope.companiesList[idx].show = ($scope.companiesList[idx].name ?  true : false);
+        }
 
         $scope.submit = function() {
 
-            //TODO CHECK DATES
+            console.log(initialDatePicker)
+          /*  var formHasErrors = false;
+            if($scope.formData.name === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.formData.kind === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.formData.img === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.formData.place === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.formData.description === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.speakersList === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+            else if($scope.companiesList === undefined) {
+                //trigger error
+                formHasErrors = true;
+            }
+
+            if(initialDatePicker !== undefined) {
+                if($scope.date.initialDate.hours === undefined || $scope.date.initialDate.hours === undefined) {
+                    //trigger error
+                    formHasErrors = true;
+                } else {
+                    initialDatePicker.setHours($scope.date.initialDate.hours);
+                    initialDatePicker.setMinutes($scope.date.initialDate.minutes);
+                    if(finalDatePicker === undefined) {
+                        finalDatePicker = initialDatePicker;
+                    }
+                    else {
+                        if($scope.date.finalDate.hours === undefined || $scope.date.finalDate.hours === undefined) {
+                            //trigger error
+                            formHasErrors = true;
+                        } 
+                        else {
+                            finalDatePicker.setHours($scope.date.finalDate.hours);
+                            finalDatePicker.setMinutes($scope.date.finalDate.minutes);
+                            if(initialDatePicker > finalDatePicker) {
+                                //trigger error
+                                formHasErrors = true;
+                            }
+                        }
+                    }
+                }
+            } 
+            else {
+                //trigger error
+                formHasErrors = true;
+            }
+
+            if(formHasErrors){
+                return
+            }*/
 
             var sessionData = {
                 name: $scope.formData.name,
@@ -101,8 +179,8 @@ theToolController
                 description: $scope.formData.description,
                 speakers: $scope.speakersList,
                 companies: $scope.companiesList,
-                initialDate: new Date(initialDatePicker.getFullYear(), initialDatePicker.getMonth(), initialDatePicker.getDay(), $scope.date.initialDate.hours, $scope.date.initialDate.minutes),
-                finalDate: new Date(finalDatePicker.getFullYear(), finalDatePicker.getMonth(), finalDatePicker.getDay(), $scope.date.finalDate.hours, $scope.date.finalDate.minutes), 
+                initialDate: initialDatePicker,
+                finalDate: finalDatePicker
             } 
 
             SessionFactory.Session.create(sessionData, function(response) {
@@ -121,15 +199,13 @@ theToolController
             });
           };
 
-        $scope.teste = function () {
-            console.log("teste");
+        $scope.teste = function (idx) {
+            console.log(69);
+            $scope.speakersList[idx].show = false;
+            console.log( $scope.speakersList[idx].show);
         };
 
-        $scope.showSpeakers = function(idx) {
-            $scope.displaySpeakersList[idx] = ($scope.speakersList[idx].name ?  true : false);
-        }
-
-        var removeElementFromList = function(list, listDisplay ,el, testFunction){
+        var removeElementFromList = function(list, el, testFunction){
             if(confirm("Are you sure you want to remove?")){
                 var index = -1;
                 for (var i = 0; i < list.length; i++) {
@@ -140,7 +216,6 @@ theToolController
                 }
                 if (index > -1) {
                     list.splice(index, 1);
-                    listDisplay.splice(index, 1);
                 }  
             }  
         }
@@ -149,62 +224,11 @@ theToolController
             initialDatePicker = new DatePicker( '#initialDate' );
             finalDatePicker = new DatePicker('#finalDate');
         });
-        /*
-        $scope.checkInitialDay = function(){
-            console.log("checkin day")
-            var date = new Date();
-            var day  = $scope.date.initialDate.day; 
-            var month = $scope.date.initialDate.month;
-            var year = $scope.date.initialDate.year;
 
-            if(month != "" && year != "" && month <= date.getMonth() + 1){
-                console.log("checkin Day1");
-                if(day < date.getDate()){
-                    console.log("checkin Day 2")
-                    $scope.date.initialDate.day = date.getDate();
-                }
-            }
-        }
-
-        $scope.checkInitialMonth = function() {
-            var date = new Date();
-            var month = $scope.date.initialDate.month;
-            var year = $scope.date.initialDate.year;
-
-            if(year != "" && year <= date.getFullYear()){
-                console.log("checkin Month")
-                if(month < (date.getMonth() + 1)){
-                    $scope.date.initialDate.month = date.getMonth() + 1;
-                    $scope.checkInitialDay();
-                    console.log( $scope.date.initialDate.month );
-                }
-            }
-        }
-
-        $scope.checkInitialYear = function() {
-            console.log("checkin Year")
-            $scope.checkInitialMonth();
-            $scope.checkInitialDay();
-        }
-
-        $scope.checkFinalDate = function() { 
-            var initialDay  = $scope.date.initialDate.day; 
-            var initialMonth = $scope.date.initialDate.month;
-            var initialYear = $scope.date.initialDate.year;
-
-            var finalDay = $scope.date.finalDay.day; 
-            var finalMonth = $scope.date.finalDate.month;
-            var finalYear = $scope.date.finalDate.year;
-
-            if(initialDay != "" && finalDay != "" && initialMonth = "" && finalMonth != "" && initialYear != "" && finalYear != "") {
-                var initialDate = new Date(initialYear, initialMonth - 1, initialDay); 
-                var finalDate = new Date(finalYear, finalMonth - 1, finalDay); 
-
-                if(initialDate > finalDate){
-                    if(initialYear > finalYear){
-
-                    }
-                }
-            }
-        }*/
+        Ink.requireModules( ['Ink.UI.FormValidator_2', 'Ink.Dom.Selector_1'], function( FormValidator, Selector ){
+            FormValidator.setRule('chooseOne', 'Select one option.', function( value ){
+                return !!Selector.select('input[type="select"]:checked',this.getElement()).length;
+            });
+            myValidator = new FormValidator( '#myForm' );
+        });
     });
