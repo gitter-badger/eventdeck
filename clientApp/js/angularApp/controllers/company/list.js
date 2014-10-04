@@ -1,5 +1,7 @@
 'use strict';
 
+var statuses = require('../../../../../options').statuses.company;
+
 theToolController
   .controller('CompaniesController', function ($rootScope, $scope, $http, $sce, CompanyFactory) {
 
@@ -33,7 +35,7 @@ theToolController
 
       $scope.limit = 20;
 
-      $scope.statuses = ['Suggestion','Contacted','In Conversations','In Negotiations','Closed Deal','Rejected','Give Up'];
+      $scope.statuses = statuses;
 
       $scope.companyPredicate = 'updated';
       $scope.reverse = 'true';
@@ -47,7 +49,7 @@ theToolController
 
       $scope.scroll = function() {
         if ($scope.limit <= $scope.companies.length)
-          $scope.limit += 8;
+          $scope.limit += 1;
       };
 
       $scope.checkPermission = function (member) {
