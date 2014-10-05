@@ -7,6 +7,14 @@ theToolController
         var initialDatePicker;
         var finalDatePicker;
         var myValidator;
+        $scope.formData = {
+            name: "",
+            kind: "",
+            url: "",
+            place: "",
+            description: ""
+        }
+
         $scope.hoursList = [];
         $scope.minutesList = [];
         $scope.sessionsKind = options.session.kind;
@@ -38,7 +46,7 @@ theToolController
             for(var i = 0; i <= 23; i++){
                 $scope.hoursList.push(i);
             }
-            for(var i = 0; i <= 59; i++){
+            for(var i = 0; i <= 59; i+=5){
                 $scope.minutesList.push(i);
             }
         };
@@ -105,105 +113,54 @@ theToolController
 
         $scope.submit = function() {
 
-            console.log(initialDatePicker)
-          /*  var formHasErrors = false;
-            if($scope.formData.name === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.formData.kind === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.formData.img === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.formData.place === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.formData.description === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.speakersList === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
-            else if($scope.companiesList === undefined) {
-                //trigger error
-                formHasErrors = true;
-            }
+            console.log(myValidator.validate());
 
-            if(initialDatePicker !== undefined) {
-                if($scope.date.initialDate.hours === undefined || $scope.date.initialDate.hours === undefined) {
-                    //trigger error
-                    formHasErrors = true;
+            if(myValidator.validate() === true) {
+                var initialDate = initialDatePicker.getDate();
+                var finalDate;
+
+                initialDate.setHours($scope.date.initialDate.hours);
+                initialDate.setMinutes($scope.date.initialDate.minutes);
+
+                if(finalDatePicker === undefined) {
+                    finalDate = initialDate; 
                 } else {
-                    initialDatePicker.setHours($scope.date.initialDate.hours);
-                    initialDatePicker.setMinutes($scope.date.initialDate.minutes);
-                    if(finalDatePicker === undefined) {
-                        finalDatePicker = initialDatePicker;
-                    }
-                    else {
-                        if($scope.date.finalDate.hours === undefined || $scope.date.finalDate.hours === undefined) {
-                            //trigger error
-                            formHasErrors = true;
-                        } 
-                        else {
-                            finalDatePicker.setHours($scope.date.finalDate.hours);
-                            finalDatePicker.setMinutes($scope.date.finalDate.minutes);
-                            if(initialDatePicker > finalDatePicker) {
-                                //trigger error
-                                formHasErrors = true;
-                            }
-                        }
-                    }
+                    finalDate = finalDatePicker.getDate();
+                    finalDate.setHours($scope.date.finalDate.hours);
+                    finalDate.setMinutes($scope.date.finalDate.minutes);
                 }
-            } 
-            else {
-                //trigger error
-                formHasErrors = true;
-            }
 
-            if(formHasErrors){
-                return
-            }*/
+                var sessionData = {
+                    name: $scope.formData.name,
+                    kind: $scope.formData.kind,
+                    img: $scope.formData.img,
+                    place: $scope.formData.place,
+                    description: $scope.formData.description,
+                    speakers: $scope.speakersList,
+                    companies: $scope.companiesList,
+                    initialDate: initialDate,
+                    finalDate: finalDate
+                } 
 
-            var sessionData = {
-                name: $scope.formData.name,
-                kind: $scope.formData.kind,
-                img: $scope.formData.img,
-                place: $scope.formData.place,
-                description: $scope.formData.description,
-                speakers: $scope.speakersList,
-                companies: $scope.companiesList,
-                initialDate: initialDatePicker,
-                finalDate: finalDatePicker
-            } 
+                console.log(sessionData);
 
-            SessionFactory.Session.create(sessionData, function(response) {
-              if(response.error) {
-                $scope.error = response.error;
-              } else {
-                $scope.message = response.message;
+                SessionFactory.Session.create(sessionData, function(response) {
+                  if(response.error) {
+                    $scope.error = response.error;
+                  }
+                  else {
+                    $scope.message = response.message;
 
-                SessionFactory.Session.getAll(function (sessions) {
-                  $scope.sessions = sessions;
+                    SessionFactory.Session.getAll(function (sessions) {
+                      $scope.sessions = sessions;
+                    });
+              
+                    console.log("Inseri com sucesso");
+                    //$location.path("/sessions/" + response.id);
+                  }
                 });
-                
-                console.log("Inseri com sucesso");
-                //$location.path("/sessions/" + response.id);
-              }
-            });
+            }
           };
-
-        $scope.teste = function (idx) {
-            console.log(69);
-            $scope.speakersList[idx].show = false;
-            console.log( $scope.speakersList[idx].show);
-        };
 
         var removeElementFromList = function(list, el, testFunction){
             if(confirm("Are you sure you want to remove?")){
@@ -220,15 +177,20 @@ theToolController
             }  
         }
 
-        Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function( Selector, DatePicker ){
-            initialDatePicker = new DatePicker( '#initialDate' );
+        Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
+            initialDatePicker = new DatePicker('#initialDate');
             finalDatePicker = new DatePicker('#finalDate');
         });
 
-        Ink.requireModules( ['Ink.UI.FormValidator_2', 'Ink.Dom.Selector_1'], function( FormValidator, Selector ){
-            FormValidator.setRule('chooseOne', 'Select one option.', function( value ){
-                return !!Selector.select('input[type="select"]:checked',this.getElement()).length;
+        Ink.requireModules( ['Ink.UI.FormValidator_2', 'Ink.Dom.Selector_1'], function(FormValidator, Selector){
+            FormValidator.setRule('chooseKind', 'Select one option.', function(value){
+                return $scope.formData.kind !== "";
             });
-            myValidator = new FormValidator( '#myForm' );
+
+            FormValidator.setRule('chooseInitialDate', 'Select one date.', function(value){
+                return initialDatePicker !== undefined && $scope.date.initialDate.hours !== "" && $scope.date.initialDate.minutes !== "";
+            });
+
+            myValidator = new FormValidator('#myForm');
         });
     });

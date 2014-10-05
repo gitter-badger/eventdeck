@@ -23,19 +23,19 @@
           <div class="control-group">
             <label for="name">Name</label>
             <div class="control">
-              <input id="name" class= ""  ng-model="formData.name" data-rules="required|text[true,false]" type="text" resettable>
+              <input id="name" class= ""  ng-model="formData.name" data-rules="required" type="text" resettable>
             </div>
           </div>
           <div class="control-group">
             <label for="kind">Kind</label>
             <div class="control">
-              <select id="kind" ng-model="formData.kind" data-rules="chooseOne" ng-options="k.name as k.name for k in sessionsKind | orderBy: 'toString()'" resettable></select>
+              <select id="kind" ng-model="formData.kind" data-rules="chooseKind" ng-options="k.name as k.name for k in sessionsKind | orderBy: 'toString()'" resettable></select>
             </div>
           </div>
           <div class="control-group">
             <label for="img">Image Url</label>
             <div class="control">
-              <input id="img" ng-model="formData.img" data-rules="required|url" type="text" resettable>
+              <input id="img" ng-model="formData.img" data-rules="required" type="text" resettable>
             </div>
             <img ng-show="formData.img" src="{{formData.img}}" width="100%" />
           </div>
@@ -44,7 +44,7 @@
           <div class="control-group">
             <label for="place">Place</label>
             <div class="control">
-              <input id="place" class= "" ng-model="formData.place" type="text" data-rules="required|text[true,false]" resettable>
+              <input id="place" class= "" ng-model="formData.place" type="text" data-rules="required" resettable>
             </div>
           </div>
           <div class="column-group horizontal-gutters">
@@ -55,7 +55,7 @@
                   <div class="ink-form">
                     <div class="control-group column-group no-margin">
                         <div class="control all-30">
-                            <input type="text" id="initialDate" class="ink-datepicker" />
+                            <input type="text" id="initialDate" class="ink-datepicker"/>
                         </div>
                     </div>
                   </div>
@@ -64,9 +64,9 @@
             </div>
             <div class="all-100">
               <span>Hours: </span>
-              <select id="hours" ng-model="date.initialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+              <select id="initialHours" ng-model="date.initialDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
               <span class="left-space">Minutes: </span>
-              <select id="minutes" ng-model="date.initialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+              <select id="initialMinutes" ng-model="date.initialDate.minutes" ng-options="minutes as minutes for minutes in minutesList" data-rules="chooseInitialDate" resettable></select>
             </div>
             <div class="all-100 top-space">
               <div class="control-group">
@@ -74,7 +74,7 @@
                 <div class="control"> 
                     <div class="control-group column-group no-margin">
                         <div class="control all-30">
-                            <input type="text" id="finalDate" class="ink-datepicker" />
+                            <input type="text" id="finalDate" class="ink-datepicker"/>
                         </div>
                     </div>
                 </div>
@@ -82,15 +82,15 @@
             </div>
             <div class="all-100">
                 <span>Hours: </span>
-                <select id="hours" ng-model="date.finalDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
+                <select id="finalHours" ng-model="date.finalDate.hours" ng-options="hours as hours for hours in hoursList" resettable></select>
                 <span class="left-space">Minutes: </span>
-                <select id="minutes" ng-model="date.finalDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
+                <select id="finalMinutes" ng-model="date.finalDate.minutes" ng-options="minutes as minutes for minutes in minutesList" resettable></select>
             </div>
             <div class="all-100 top-space">
               <div class="control-group">
                 <label for="description">Description</label>
               <div class="control">
-              <textarea id="description" ng-model="formData.description" data-rules="required|text[true,false]" type="text" rows="8" resettable></textarea>
+              <textarea id="description" ng-model="formData.description" data-rules="required" type="text" rows="8" resettable></textarea>
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@
                     <div class="control-group">
                       <label for="Speaker #{{$index + 1}}">Speaker #{{$index + 1}}</label>
                       <div class="control">
-                      <input type="text" ng-model="speakerListed.name" ng-change="showSpeakers($index)" ng-click ="showSpeakers($index)" id="Speaker #{{$index + 1}}" placeholder="Speaker name" data-rules="required|text[true,false]">
+                      <input type="text" ng-model="speakerListed.name" ng-change="showSpeakers($index)" ng-click ="showSpeakers($index)" id="Speaker #{{$index + 1}}" placeholder="Speaker name">
                       </div>
                     </div>
                     <ul class="submenu grey" ng-if="speakerListed.name && speakerListed.name.length > 1" style="display: {{speakerListed.show ? 'block' : 'none'}};">
@@ -146,7 +146,7 @@
                       <div class="control-group">
                         <label for="Company #{{$index + 1}}">Company #{{$index + 1}}</label>
                         <div class="control">
-                        <input type="text" ng-model="companyListed.name" ng-change="showCompanies($index)" ng-click ="showCompanies($index)" id="Company #{{$index + 1}}" placeholder="Company name" data-rules="required|text[true,false]">
+                        <input type="text" ng-model="companyListed.name" ng-change="showCompanies($index)" ng-click ="showCompanies($index)" id="Company #{{$index + 1}}" placeholder="Company name">
                         </div>
                       </div>
                       <ul class="submenu grey" ng-if="companyListed.name && companyListed.name.length > 1" style="display: {{companyListed.show ? 'block' : 'none'}};">
