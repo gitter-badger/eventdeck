@@ -20,7 +20,7 @@ theToolController.controller('SpeakerEmbedController', function ($rootScope, $sc
 
     $scope.getUnreadNotifications = function (thread) {
       var notifications = $scope.notifications.filter(function(o) {
-        return o.thread == thread;©
+        return o.thread == thread;
       });
       return notifications;
     };

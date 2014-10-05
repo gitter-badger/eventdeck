@@ -187,7 +187,7 @@ theToolController
                 return $scope.formData.kind !== "";
             });
 
-            FormValidator.setRule('chooseInitialDate', 'Select one date.', function(value){
+            FormValidator.setRule('chooseInitialDate', 'Select a valid date.', function(value){
                 return initialDatePicker !== undefined && $scope.date.initialDate.hours !== "" && $scope.date.initialDate.minutes !== "";
             });
 
