@@ -45,6 +45,13 @@ test('setDate', function () {
     equal(dt._day, 1);
 });
 
+test('setDate with Date objects', function () {
+    dt.setDate(new Date(2010, 11, 12));
+    equal(dt._year, 2010);
+    equal(dt._month + 1, 12);
+    equal(dt._day, 12);
+});
+
 test('_fitDateToRange', function () {
     dt._setMinMax('2000-05-05:2001-05-05');
     deepEqual(
@@ -283,7 +290,7 @@ test('set', function () {
 test('show', function () {
     equal(Css.getStyle(dt._containerObject, 'display'), 'none');
     dt.show();
-    equal(Css.getStyle(dt._containerObject, 'display'), 'inline-block');
+    equal(Css.getStyle(dt._containerObject, 'display'), 'block');
 });
 
 test('destroy', function () {

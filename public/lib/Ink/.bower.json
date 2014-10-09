@@ -1,6 +1,6 @@
 {
   "name": "Ink",
-  "version": "3.0.2",
+  "version": "3.0.5",
   "description": "An HTML5/CSS3 framework used at SAPO for fast and efficient website design and prototyping.",
   "keywords": [
     "HTML",
@@ -16,7 +16,7 @@
     "node_modules"
   ],
   "dependencies": {
-    "font-awesome": "~4.0.3",
+    "font-awesome": "~4.1.0",
     "animate.css": "~3.1.0",
     "bower-compass-core": ">=0.0.1"
   },
@@ -28,11 +28,11 @@
     "qunit-tap": "~1.4.1"
   },
   "homepage": "https://github.com/sapo/Ink",
-  "_release": "3.0.2",
+  "_release": "3.0.5",
   "_resolution": {
     "type": "version",
-    "tag": "3.0.2",
-    "commit": "8cad35a2de64e39b4bb5c0c0a0cef079f419f89e"
+    "tag": "3.0.5",
+    "commit": "f13a7372c673f0a04e48ea3bbffe739e1d839312"
   },
   "_source": "git://github.com/sapo/Ink.git",
   "_target": "~3.0.2",

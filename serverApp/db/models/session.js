@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var sessionSchema = new mongoose.Schema({
   id: String,
   name: String,
-  kind: String, 
+  kind: String,
   img: String,
   place: String,
   description: String,

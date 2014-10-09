@@ -25,7 +25,8 @@
     "jquery": "~2.1.1",
     "underscore": "~1.6.0",
     "angular-unsavedChanges": "~0.1.1",
-    "angular": "~1.2.21"
+    "angular": "~1.2.21",
+    "angular-ui-calendar": "latest"
   },
   "resolutions": {
     "font-awesome": "~4.1.0"

@@ -258,6 +258,15 @@
             }
         }
 
+        // generate the 16% width
+        @if $i > 15 and $i <= 20 {
+            .all-16 {
+                width: 16.66%;
+                float: left;
+                clear: none;
+            }
+        }
+
 
         .all-#{$i} {
             width: $i * 1%;
@@ -304,6 +313,15 @@
                 width: 66.66%;
             }
         }
+
+
+        // generate the 16% width
+        @if $i > 15 and $i <= 20 {
+            .#{$class-name}-16 {
+                width: 16.66%;
+            }
+        }
+
 
         // generate the 5% step widths
         .#{$class-name}-#{$i} {
@@ -619,52 +637,22 @@
     }
 }
 
+@mixin css-js-bridge-legacy($breakpoints) {
+    
+    &:after {
+        content: js-bridge($grid-breakpoints);
+        display: none;
+    }
+    font-size: $base-font-size;
+}
+
 @mixin css-js-bridge($breakpoints) {
-
-    @each $breakpoint in $breakpoints {
-
-        $class-name: nth($breakpoint,1);
-        $minimum-width: nth($breakpoint,2);
-        $maximum-width: nth($breakpoint,3);
-        $gutter-width: nth($breakpoint,4);
-        $base-font-size: nth($breakpoint,5);
-        $no-media-query: nth($breakpoint,6);
-
-        @if $minimum-width and not $maximum-width {
-            @media screen and (min-width: $minimum-width) {
-                html {
-                    &:after {
-                        content: '{"name":"#{$class-name}", "size":{"min":"#{$minimum-width}","max":"#{$maximum-width}"}}';
-                        display: none;
-                    }
-                    font-size: $base-font-size;
-                }
-            }
+    html {
+        &:after {
+            content: js-bridge($grid-breakpoints);
+            display: none;
         }
-
-        @if $minimum-width and $maximum-width {
-            @media screen and (min-width: $minimum-width) and (max-width: $maximum-width) {
-                html {
-                    &:after {
-                        content: '{"name":"#{$class-name}", "size":{"min":"#{$minimum-width}","max":"#{$maximum-width}"}}';
-                        display: none;
-                    }
-                    font-size: $base-font-size;
-                }
-            }
-        }
-
-        @if not $minimum-width and $maximum-width {
-            @media screen and (max-width: $maximum-width) {
-                html {
-                    &:after {
-                        content: '{"name":"#{$class-name}", "size":{"min":"#{$minimum-width}","max":"#{$maximum-width}"}}';
-                        display: none;
-                    }
-                    font-size: $base-font-size;
-                }
-            }
-        }
+        font-size: $base-font-size;
     }
 }
 
@@ -678,12 +666,13 @@
 
     @each $breakpoint in $breakpoints {
 
-        $class-name: nth($breakpoint,1);
-        $minimum-width: nth($breakpoint,2);
-        $maximum-width: nth($breakpoint,3);
-        $gutter-width: nth($breakpoint,4);
-        $base-font-size: nth($breakpoint,5);
-        $no-media-query: nth($breakpoint,6);
+        $media:             nth($breakpoint,1);
+        $class-name:        nth($breakpoint,2);
+        $minimum-width:     nth($breakpoint,3);
+        $maximum-width:     nth($breakpoint,4);
+        $gutter-width:      nth($breakpoint,5);
+        $base-font-size:    nth($breakpoint,6);
+        $no-media-query:    nth($breakpoint,7);
 
         @if $no-media-query {
               @include generate-grid-container($grid-class-name, $gutter-width);
@@ -707,15 +696,16 @@
 
     @each $breakpoint in $breakpoints {
 
-        $class-name: nth($breakpoint,1);
-        $minimum-width: nth($breakpoint,2);
-        $maximum-width: nth($breakpoint,3);
-        $gutter-width: nth($breakpoint,4);
-        $base-font-size: nth($breakpoint,5);
-        $no-media-query: nth($breakpoint,6);
+        $media:             nth($breakpoint,1);
+        $class-name:        nth($breakpoint,2);
+        $minimum-width:     nth($breakpoint,3);
+        $maximum-width:     nth($breakpoint,4);
+        $gutter-width:      nth($breakpoint,5);
+        $base-font-size:    nth($breakpoint,6);
+        $no-media-query:    nth($breakpoint,7);
 
         @if $minimum-width and not $maximum-width {
-            @media screen and (min-width: $minimum-width) {
+            @media #{$media} and (min-width: $minimum-width) {
                 @include generate-grid-container($grid-class-name, $gutter-width);
                 @include generate-grid-divisions($class-name);
                 @include generate-column-group-container($gutter-width,$class-name);
@@ -725,7 +715,7 @@
         }
 
         @if $minimum-width and $maximum-width {
-            @media screen and (min-width: $minimum-width) and (max-width: $maximum-width) {
+            @media #{$media} and (min-width: $minimum-width) and (max-width: $maximum-width) {
                 @include generate-grid-container($grid-class-name, $gutter-width);
                 @include generate-grid-divisions($class-name);
                 @include generate-column-group-container($gutter-width,$class-name);
@@ -735,7 +725,17 @@
         }
 
         @if not $minimum-width and $maximum-width {
-            @media screen and (max-width: $maximum-width) {
+            @media #{$media} and (max-width: $maximum-width) {
+                @include generate-grid-container($grid-class-name, $gutter-width);
+                @include generate-grid-divisions($class-name);
+                @include generate-column-group-container($gutter-width,$class-name);
+                @include generate-grid-helper-classes($class-name,$gutter-width);
+                @include generate-visibility-classes($class-name);
+            }
+        }
+
+        @if not $minimum-width and not $maximum-width {
+            @media #{$media} {
                 @include generate-grid-container($grid-class-name, $gutter-width);
                 @include generate-grid-divisions($class-name);
                 @include generate-column-group-container($gutter-width,$class-name);

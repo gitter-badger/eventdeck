@@ -16,6 +16,7 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
 
     function testTabs(name, testBack, options) {
         test(name, function ()  {
+            location.hash = '#no-hash';
             var container = makeContainer();
             var tabs = Ink.ss('.tabs-nav li', container);
             var tabComponent = new Tabs(container, options || {});
@@ -36,7 +37,7 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
     testTabs('_changeTab', function (tabComponent, container, tabs) {
         var changeTo = tabs[1];  // because tab 0 is the active one now
         ok(changeTo);
-        notStrictEqual(tabComponent.activeMenuTab(), changeTo);
+        notStrictEqual(tabComponent._activeMenuTab, changeTo);
 
         tabComponent._changeTab(Ink.s('a', changeTo));
 
@@ -51,21 +52,21 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
     });
 
     testTabs('changeTab calls _changeTab with correct arguments', function (tabComponent, container) {
-        var spy = sinon.spy(tabComponent, '_changeTab');
+        var spy = sinon.stub(tabComponent, '_changeTab');
         tabComponent.changeTab('home');
         ok(spy.calledOnce);
         deepEqual(spy.lastCall.args, [Ink.s('a[href$="#home"]', container), true]);
     });
 
     testTabs('... but not when new tab is invalid', function (tabComponent) {
-        var spy = sinon.spy(tabComponent, '_changeTab');
+        var spy = sinon.stub(tabComponent, '_changeTab');
         tabComponent.changeTab('hoem');
-        ok(!spy.called);
+        ok(!spy.called, 'spy was called');
     });
 
     testTabs('when clicking a tab, _changeTab is called with the target link', function (tabComponent, container) {
         stop();
-        var spy = sinon.spy(tabComponent, '_changeTab');
+        var spy = sinon.stub(tabComponent, '_changeTab');
         var theTabLink = Ink.s('a[href$="#news"]', container);
         Syn.click(theTabLink, function () {
             ok(spy.calledOnce);
@@ -74,24 +75,14 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
         });
     });
 
-    testTabs('When a tab has the class tabs-tab, ignore any other <a> tags (new feature with backwards compat)', function (tabComponent, container) {
+    testTabs('regression: Clicking a tab\'s child element also works.', function (tabComponent, container) {
         stop();
         var spy = sinon.spy(tabComponent, '_changeTab');
         var theTabLink = Ink.s('a[href$="#news"]', container);
-        Ink.s('a[href$="#home"]', container).className += ' tabs-tab';
-        Syn.click(theTabLink, function () {
-            ok(spy.notCalled, '_changeTab must not be called because this is not a legit tab.');
-            start();
-        });
-    })
-
-    testTabs('unless it\'s a disabled tab', function (tabComponent, container) {
-        stop();
-        var spy = sinon.spy(tabComponent, '_changeTab');
-        var theTabLink = Ink.s('a[href$="#news"]', container);
-        tabComponent.disable(theTabLink)
-        Syn.click(theTabLink, function () {
-            ok(spy.notCalled);
+        var tabChild = InkElement.create('span', { insertBottom: theTabLink });
+        Syn.click(tabChild, function () {
+            ok(spy.calledOnce);
+            deepEqual(spy.lastCall && spy.lastCall.args, [theTabLink, true]);
             start();
         });
     });
@@ -143,8 +134,6 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
     }));
     
     module('change the hash in the URL', {
-        setup: function () { window.location.hash = '#original-hash'; },
-        teardown: function () { window.location.hash = ''; }
     });
 
     testTabs('clicking a tab changes window.location.hash', function (tabComponent, container) {
@@ -158,8 +147,43 @@ Ink.requireModules(['Ink.UI.Tabs_1', 'Ink.UI.Common_1', 'Ink.Dom.Element_1', 'In
     testTabs('... except when options.preventUrlChange === true', function (tabComponent, container) {
         stop();
         Syn.click(Ink.s('a[href$="#home"]', container), function () {
-            equal(window.location.hash, '#original-hash', 'location.hash shouldnt change if preventUrlChange === true.');
+            equal(window.location.hash, '#no-hash', 'location.hash shouldnt change if preventUrlChange === true.');
             start();
         });
     }, {preventUrlChange: true});
+
+    module('Private API');
+
+    testTabs('hashify/dehashify', function (tabs) {
+        equal(
+            tabs._hashify('wow'),
+            '#wow');
+
+        equal(
+            tabs._hashify('#wow'),
+            '#wow');
+
+        equal(
+            tabs._dehashify('#wow'),
+            'wow');
+
+        equal(
+            tabs._dehashify('wow'),
+            'wow');
+    });
+
+    testTabs('findLink', function (tabs, container) {
+        var homeLink = Ink.s('[href^="#home"]', container);
+        ok(homeLink, 'sanity check');
+        ok(homeLink.parentNode.nodeName.toLowerCase() === 'li', 'sanity check');
+        strictEqual(tabs._findLinkByHref('home'), homeLink, 'by name');
+        strictEqual(tabs._findLinkByHref('#home'), homeLink, 'by hash');
+        strictEqual(tabs._findLinkByHref(homeLink), homeLink, 'by itself');
+        strictEqual(tabs._findLinkByHref(homeLink.parentNode), homeLink, 'by li containing the link');
+        strictEqual(tabs._findLinkByHref(Ink.s('[id="home"]', container)), homeLink, 'by section');
+
+        strictEqual(tabs._findLinkByHref(document.body), null, 'Wrong element');
+        strictEqual(tabs._findLinkByHref('wrong-thing'), null, 'Wrong name');
+        strictEqual(tabs._findLinkByHref(null), null, 'null');
+    });
 });

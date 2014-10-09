@@ -773,6 +773,7 @@ Ink.createModule('Ink.Dom.Event', 1, [], function() {
     KEY_TAB:       9,
     KEY_RETURN:   13,
     KEY_ESC:      27,
+    KEY_SPACE:    32,
     KEY_LEFT:     37,
     KEY_UP:       38,
     KEY_RIGHT:    39,
@@ -1101,7 +1102,7 @@ Ink.createModule('Ink.Dom.Event', 1, [], function() {
      */
     pointerX: function(ev)
     {
-        return (ev.touches && ev.touches[0] && ev.touches[0].pageX) ||
+        return (ev.touches && ev.touches[0] && ev.touches[0].clientX) ||
             (ev.pageX) ||
             (ev.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));
     },
@@ -1115,7 +1116,7 @@ Ink.createModule('Ink.Dom.Event', 1, [], function() {
      */
     pointerY: function(ev)
     {
-        return (ev.touches && ev.touches[0] && ev.touches[0].pageY) ||
+        return (ev.touches && ev.touches[0] && ev.touches[0].clientY) ||
             (ev.pageY) ||
             (ev.clientY + (document.documentElement.scrollTop || document.body.scrollTop));
     },

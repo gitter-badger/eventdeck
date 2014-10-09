@@ -44,6 +44,7 @@
      */
 
     window.Ink = {
+        VERSION: '3.0.5',
         _checkPendingRequireModules: function() {
             var I, F, o, dep, mod, cb, pRMs = [];
             for (I = 0, F = pendingRMs.length; I < F; ++I) {
@@ -177,13 +178,13 @@
             scriptEl.setAttribute('type', contentType || 'text/javascript');
             scriptEl.setAttribute('src', uri);
 
-            scriptEl.onerror = scriptEl.onreadystatechange = function (err) {
-                err = err || window.event;
-                if (err.type === 'readystatechange' && scriptEl.readyState !== 'loaded') {
+            scriptEl.onerror = scriptEl.onreadystatechange = function (ev) {
+                ev = ev || window.event;
+                if (ev.type === 'readystatechange' && scriptEl.readyState !== 'loaded') {
                     // if not readyState == 'loaded' it's not an error.
                     return;
                 }
-                Ink.error(['Failed to load script ', uri, '. (', err || 'unspecified error', ')'].join(''));
+                Ink.error(['Failed to load script from ', uri, '.'].join(''));
             };
             // CHECK ON ALL BROWSERS
             /*if (document.readyState !== 'complete' && !document.body) {
@@ -384,6 +385,13 @@
                 } else {
                     dep = deps[i];
                 }
+
+                // Because trailing commas in oldIE bring us undefined values here
+                if (!dep) {
+                    --o.remaining;
+                    continue;
+                }
+
                 mod = modules[dep];
                 if (mod) {
                     o.args[i] = mod;
@@ -576,17 +584,18 @@
          * @return destination object, enriched with defaults from the sources
          * @sample Ink_1_extendObj.html 
          */
-        extendObj: function(destination, source) {
-            if (arguments.length > 2) {
-                source = Ink.extendObj.apply(this, [].slice.call(arguments, 1));
-            }
-            if (source) {
-                for (var property in source) {
-                    if(Object.prototype.hasOwnProperty.call(source, property)) {
-                        destination[property] = source[property];
+        extendObj: function(destination/*, source... */) {
+            var sources = [].slice.call(arguments, 1);
+
+            for (var i = 0, len = sources.length; i < len; i++) {
+                if (!sources[i]) { continue; }
+                for (var property in sources[i]) {
+                    if(Object.prototype.hasOwnProperty.call(sources[i], property)) {
+                        destination[property] = sources[i][property];
                     }
                 }
             }
+
             return destination;
         },
 

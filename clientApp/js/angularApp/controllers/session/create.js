@@ -24,7 +24,7 @@ theToolController
             position: "",
             show: false
         }];
-        
+
         $scope.companiesList = [{
             id: "",
             name: "",
@@ -85,7 +85,7 @@ theToolController
         $scope.addCompanyRow = function ()  {
             $scope.companiesList.push({
                 id: "",
-                name: "", 
+                name: "",
                 show: false
             })
         };
@@ -113,8 +113,6 @@ theToolController
 
         $scope.submit = function() {
 
-            console.log(myValidator.validate());
-
             if(myValidator.validate() === true) {
                 var initialDate = initialDatePicker.getDate();
                 var finalDate;
@@ -123,7 +121,7 @@ theToolController
                 initialDate.setMinutes($scope.date.initialDate.minutes);
 
                 if(finalDatePicker === undefined) {
-                    finalDate = initialDate; 
+                    finalDate = initialDate;
                 } else {
                     finalDate = finalDatePicker.getDate();
                     finalDate.setHours($scope.date.finalDate.hours);
@@ -140,9 +138,8 @@ theToolController
                     companies: $scope.companiesList,
                     initialDate: initialDate,
                     finalDate: finalDate
-                } 
+                }
 
-                console.log(sessionData);
 
                 SessionFactory.Session.create(sessionData, function(response) {
                   if(response.error) {
@@ -154,8 +151,7 @@ theToolController
                     SessionFactory.Session.getAll(function (sessions) {
                       $scope.sessions = sessions;
                     });
-              
-                    console.log("Inseri com sucesso");
+
                     //$location.path("/sessions/" + response.id);
                   }
                 });
@@ -173,8 +169,8 @@ theToolController
                 }
                 if (index > -1) {
                     list.splice(index, 1);
-                }  
-            }  
+                }
+            }
         }
 
         Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
