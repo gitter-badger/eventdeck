@@ -16,25 +16,22 @@ theToolController
           dayClick: $scope.alertEventOnClick,
           eventDrop: $scope.alertOnDrop,
           eventResize: $scope.alertOnResize,
+          eventClick: $scope.eventClick,
           eventLimit: true,
-          events: [
-    				{
-              id: $scope.sessions[$scope.sessions.length - 1].id,
-    					title: $scope.sessions[$scope.sessions.length - 1].name,
-    					url: 'http://google.com/',
-    					start: "2014-10-09",
-              end: "2014-10-09"
-    				},
-            {
-    					title: 'Meeting',
-    					start: '2014-09-12T10:30:00',
-    					end: '2014-09-12T12:30:00'
-    				}
-    			]
         }
       };
 
-      $scope.eventSources = [{
+      $scope.events = [{
+        id: $scope.sessions[$scope.sessions.length - 1].id ,
+        title: $scope.sessions[$scope.sessions.length - 1].name,
+        start: $scope.sessions[$scope.sessions.length - 1].initialDate,
+        end: $scope.sessions[$scope.sessions.length - 1].finalDate,
+      }]
 
-      }];
+      $scope.eventSource = {
+        url: "https://www.google.com/calendar/feeds/franciscocgoncalves%40gmail.com/public/basic"
+      }
+      $scope.eventSources = [$scope.events, $scope.eventSource];
+      
+
 });
