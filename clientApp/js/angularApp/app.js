@@ -50,6 +50,6 @@ config(["$routeProvider", function($routeProvider) {
   $routeProvider.when("/topic/:id"                 , {templateUrl: "views/topic/view.html",            controller: "TopicController"});
   $routeProvider.when("/communications/:kind"      , {templateUrl: "views/communication/list.html",    controller: "CommunicationsController"});
   $routeProvider.when("/session/"                  , {templateUrl: "views/session/create.html",        controller: "CreateSessionController"});
-  $routeProvider.when("/session/sessions"          , {templateUrl: "views/session/sessions.html",      controller: "SessionsController"});
+  $routeProvider.when("/sessions/"                 , {templateUrl: "views/session/sessions.html",      controller: "SessionsController"});
   $routeProvider.otherwise({redirectTo: "/"});
 }]);
