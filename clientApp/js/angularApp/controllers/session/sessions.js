@@ -26,12 +26,9 @@ theToolController
         title: $scope.sessions[$scope.sessions.length - 1].name,
         start: $scope.sessions[$scope.sessions.length - 1].initialDate,
         end: $scope.sessions[$scope.sessions.length - 1].finalDate,
+        url: "#/session/" + $scope.sessions[$scope.sessions.length - 1]._id
       }]
 
-      $scope.eventSource = {
-        url: "https://www.google.com/calendar/feeds/franciscocgoncalves%40gmail.com/public/basic"
-      }
-      $scope.eventSources = [$scope.events, $scope.eventSource];
-      
-
+      console.log($scope.events)
+      $scope.eventSources = [$scope.events];
 });
