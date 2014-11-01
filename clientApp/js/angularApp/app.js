@@ -14,7 +14,7 @@ angular.module("theTool", [
   "theTool.directives",
   "theTool.controllers",
   'ui.calendar'
-]).
+  ]).
 config(["$routeProvider", function($routeProvider) {
   $routeProvider.when("/"                          , {templateUrl: "views/chat/view.html",             controller: "ChatController"});
   $routeProvider.when("/admin"                     , {templateUrl: "views/admin/index.html",           controller: "AdminController"});
@@ -50,7 +50,8 @@ config(["$routeProvider", function($routeProvider) {
   $routeProvider.when("/topic/:id"                 , {templateUrl: "views/topic/view.html",            controller: "TopicController"});
   $routeProvider.when("/communications/:kind"      , {templateUrl: "views/communication/list.html",    controller: "CommunicationsController"});
   $routeProvider.when("/session/"                  , {templateUrl: "views/session/session.html",       controller: "SessionController"});
-  $routeProvider.when("/session/:id"               , {templateUrl: "views/session/session.html",       controller: "SessionController"});
+  $routeProvider.when("/session/:id/edit"          , {templateUrl: "views/session/session.html",       controller: "SessionController"});
   $routeProvider.when("/sessions/"                 , {templateUrl: "views/session/sessions.html",      controller: "SessionsController"});
+  $routeProvider.when("/session/:id"               , {templateUrl: "views/session/view.html",          controller: "ViewSessionController"});
   $routeProvider.otherwise({redirectTo: "/"});
 }]);
