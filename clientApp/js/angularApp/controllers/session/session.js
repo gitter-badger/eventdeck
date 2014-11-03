@@ -3,218 +3,236 @@
 theToolController
 .controller('SessionController', function ($rootScope, $scope, $http, $routeParams, $location, SessionFactory) {
 
-    var options = require('./../../../../../options.js');
-    var initialDatePicker;
-    var finalDatePicker;
-    var myValidator;
-    $scope.allDay = false;
-    $scope.formData = {
-        name: "",
-        kind: "",
-        url: "",
-        place: "",
-        description: ""
-    }
+  //================================INITIALIZATION================================
 
-    $scope.hoursList = [];
-    $scope.minutesList = [];
-    $scope.sessionsKind = options.session.kind;
-    $scope.speakersList = [{
-        id: "",
-        name: "",
-        position: "",
-        show: false
-    }];
+  var options = require('./../../../../../options.js');
+  var initialDatePicker;
+  var finalDatePicker;
+  var myValidator;
+  $scope.formData = {
+  	name: "",
+  	kind: "",
+  	url: "",
+  	place: "",
+  	description: "",
+  	allDay: false,
+  	speakersList: [{
+  		id: "",
+  		name: "",
+  		position: "",
+  		show: false
+  	}],
+  	companiesList: [{
+  		id: "",
+  		name: "",
+  		show: false
+  	}],
+  	initialDate: {
+  		hours: undefined,
+  		minutes: undefined,
+  		date: new Date(),
+  	},
+  	finalDate: {
+  		hours: undefined,
+  		minutes: undefined,
+  		date: new Date(),
+  	}
+  }
 
-    $scope.companiesList = [{
-        id: "",
-        name: "",
-        show: false
-    }];
-
-    $scope.date = {
-        initialDate : {
-            hours: "",
-            minutes: ""
-        },
-        finalDate: {
-            hours: "",
-            minutes: ""
-        }
-    }
-
-    var initDate = function() {
-        for(var i = 0; i <= 23; i++){
-            $scope.hoursList.push(i);
-        }
-        for(var i = 0; i <= 59; i+=5){
-            $scope.minutesList.push(i);
-        }
-    };
-
-    var init = function() {
-        initDate();
-
-        if ($routeParams.id !== undefined) {
-            var session = $scope.getSession($routeParams.id);
-
-            $scope.formData = {
-                name: session.name,
-                kind: session.kind,
-                url: session.url,
-                place: session.place,
-                description: session.description
-            };
-
-            $scope.speakersList = session.speakers;
-            $scope.companiesList =  session.companies;
-            $scope.date.initialDate = session.initialDate;
-            $scope.date.finalDate = session.finalDate;
-        }
-    }
-
-    init()
+  $scope.hoursList = [];
+  $scope.minutesList = [];
+  $scope.sessionsKind = options.session.kind;
 
 
-    $scope.addSpeakerRow = function ()  {
-        $scope.speakersList.push({
-            id: "",
-            name: "",
-            position: "",
-            show: false
-        });
-    };
+  var init = function() {
 
-    $scope.removeSpeakerRow = function (speaker) {
-        var testToRemove = function(el1, el2){
-            if(el1.id == el2.id && el1.name == el2.name && el1.position == el2.position){
-                return true;
-            }
-            return false;
-        }
-        removeElementFromList($scope.speakersList, speaker, testToRemove);
-    };
+  	for(var i = 0; i <= 23; i++){
+  		$scope.hoursList.push(i);
+  	}
+  	for(var i = 0; i <= 59; i+=5){
+  		$scope.minutesList.push(i);
+  	}
 
-    $scope.addSpeaker = function(idx, name, id) {
-        $scope.speakersList[idx].name = name;
-        $scope.speakersList[idx].id = id;
-        $scope.speakersList[idx].show = false;
-    };
+  	if ($routeParams.id !== undefined) {
+  		var session = $scope.getSession($routeParams.id);
 
-    $scope.showSpeakers = function(idx) {
-        $scope.speakersList[idx].show = ($scope.speakersList[idx].name ?  true : false);
-    };
+  		$scope.formData = {
+  			name: session.name,
+  			kind: session.kind,
+  			img: session.img,
+  			place: session.place,
+  			description: session.description,
+  			allDay: session.allDay,
+  			speakersList: session.speakers,
+  			companiesList: session.companies,
+  			initialDate: session.initialDate,
+  			finalDate: session.finalDate
+  		};
+  		$scope.date.initialDate = session.initialDate;
+  		$scope.date.finalDate = session.finalDate;
+  	}
+  }
 
-    $scope.addCompanyRow = function ()  {
-        $scope.companiesList.push({
-            id: "",
-            name: "",
-            show: false
-        })
-    };
 
-    $scope.removeCompanyRow = function (company) {
-        var testToRemove = function(el1, el2){
-            if(el1.id == el2.id && el1.name == el2.name){
-                return true;
-            }
-            return false;
-        }
-        removeElementFromList($scope.companiesList, company, testToRemove);
-    };
+  init();
 
-    $scope.addCompany = function(idx, name, id) {
-        $scope.companiesList[idx].name = name;
-        $scope.companiesList[idx].id = id;
-        $scope.companiesList[idx].show = false;
-    }
+  //================================SCOPE FUNCTIONS================================
 
-    $scope.showCompanies = function(idx) {
+  $scope.addSpeakerRow = function ()  {
+  	$scope.formData.speakersList.push({
+  		id: "",
+  		name: "",
+  		position: "",
+  		show: false
+  	});
+  };
 
-        $scope.companiesList[idx].show = ($scope.companiesList[idx].name ?  true : false);
-    }
+  $scope.removeSpeakerRow = function (speaker) {
+  	var testToRemove = function(el1, el2){
+  		if(el1.id == el2.id && el1.name == el2.name && el1.position == el2.position){
+  			return true;
+  		}
+  		return false;
+  	}
+  	removeElementFromList($scope.formData.speakersList, speaker, testToRemove);
+  };
 
-    $scope.submit = function() {
-        console.log("Entrei");
-        console.log(myValidator.validate());
-        if(myValidator.validate() === true) {
-            var initialDate = initialDatePicker.getDate();
-            var finalDate = finalDatePicker.getDate();
+  $scope.addSpeaker = function(idx, name, id) {
+  	$scope.formData.speakersList[idx].name = name;
+  	$scope.formData.speakersList[idx].id = id;
+  	$scope.formData.speakersList[idx].show = false;
+  };
 
-            if(!$scope.allDay){
-                initialDate.setHours($scope.date.initialDate.hours);
-                initialDate.setMinutes($scope.date.initialDate.minutes); 
-                finalDate.setHours($scope.date.finalDate.hours);
-                finalDate.setMinutes($scope.date.finalDate.minutes);               
-            }
+  $scope.showSpeakers = function(idx) {
+  	$scope.formData.speakersList[idx].show = ($scope.formData.speakersList[idx].name ?  true : false);
+  };
 
-            var sessionData = {
-                name: $scope.formData.name,
-                kind: $scope.formData.kind,
-                img: $scope.formData.img,
-                place: $scope.formData.place,
-                description: $scope.formData.description,
-                speakers: $scope.speakersList,
-                companies: $scope.companiesList,
-                allDay: $scope.allDay,
-                initialDate: initialDate,
-                finalDate: finalDate
-            }
-            console.log(sessionData);
+  $scope.addCompanyRow = function ()  {
+  	$scope.formData.companiesList.push({
+  		id: "",
+  		name: "",
+  		show: false
+  	})
+  };
 
-            SessionFactory.Session.create(sessionData, function(response) {
-              if(response.error) {
-                $scope.error = response.error;
-                console.log(response.error);
-            }
-            else {
-                $scope.message = response.message;
+  $scope.removeCompanyRow = function (company) {
+  	var testToRemove = function(el1, el2){
+  		if(el1.id == el2.id && el1.name == el2.name){
+  			return true;
+  		}
+  		return false;
+  	}
+  	removeElementFromList($scope.formData.companiesList, company, testToRemove);
+  };
 
-                SessionFactory.Session.getAll(function (sessions) {
-                  $scope.sessions = sessions;
-              });
+  $scope.addCompany = function(idx, name, id) {
+  	$scope.formData.companiesList[idx].name = name;
+  	$scope.formData.companiesList[idx].id = id;
+  	$scope.formData.companiesList[idx].show = false;
+  }
 
-                console.log(message);
+  $scope.showCompanies = function(idx) {
 
-                    //$location.path("/sessions/" + response.id);
-                }
-            });
-        }
-    };
+  	$scope.formData.companiesList[idx].show = ($scope.formData.companiesList[idx].name ?  true : false);
+  }
 
-    var removeElementFromList = function(list, el, testFunction){
-        if(confirm("Are you sure you want to remove?")){
-            var index = -1;
-            for (var i = 0; i < list.length; i++) {
-                if (testFunction(list[i], el)) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index > -1) {
-                list.splice(index, 1);
-            }
-        }
-    }
+  $scope.submit = function() {
+  	if(myValidator.validate() === true) {
 
-    Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
-        initialDatePicker = new DatePicker('#initialDate');
-        finalDatePicker = new DatePicker('#finalDate');
-    });
+  		if(!$scope.allDay){
+  			$scope.formData.initialDate.date.setHours($scope.formData.initialDate.hours);
+  			$scope.formData.initialDate.date.setMinutes($scope.formData.initialDate.minutes); 
+  			$scope.formData.finalDate.date.setHours($scope.formData.finalDate.hours);
+  			$scope.formData.finalDate.date.setMinutes($scope.formData.finalDate.minutes);            
+  		}
 
-    Ink.requireModules( ['Ink.UI.FormValidator_2', 'Ink.Dom.Selector_1'], function(FormValidator, Selector){
-        FormValidator.setRule('chooseKind', 'Select one option.', function(value){
-            return $scope.formData.kind !== "";
-        });
+  		var sessionData = {
+  			name: $scope.formData.name,
+  			kind: $scope.formData.kind,
+  			img: $scope.formData.img,
+  			place: $scope.formData.place,
+  			description: $scope.formData.description,
+  			speakers: $scope.formData.speakersList,
+  			companies: $scope.formData.companiesList,
+  			allDay: $scope.formData.allDay,
+  			initialDate: $scope.formData.initialDate.date,
+  			finalDate: $scope.formData.finalDate.date
+  		}
 
-        FormValidator.setRule('chooseDate', 'Select a valid date.', function(value){
-            return  $scope.allDay || (!$scope.allDay 
-                && $scope.date.initialDate.hours !== "" 
-                && $scope.date.initialDate.minutes !== ""
-                && $scope.date.finalDate.hours !== "" 
-                && $scope.date.finalDate.minutes !== "");
-        });
+  		SessionFactory.Session.create(sessionData, function(response) {
+  			if(response.error) {
+  				$scope.error = response.error;
+  				console.log(response.error);
+  			}
+  			else {
+  				$scope.message = response.message;
 
-        myValidator = new FormValidator('#myForm');
-    });
+  				SessionFactory.Session.getAll(function (sessions) {
+  					$scope.sessions = sessions;
+  				});
+
+  				console.log("Response: " + response);
+  				console.log(response)
+  				$location.path("/session/" + response._id);
+  			}
+  		});
+  	}
+  };
+
+  //===================================FUNCTIONS===================================
+
+  var removeElementFromList = function(list, el, testFunction){
+  	if(confirm("Are you sure you want to remove?")){
+  		var index = -1;
+  		for (var i = 0; i < list.length; i++) {
+  			if (testFunction(list[i], el)) {
+  				index = i;
+  				break;
+  			}
+  		}
+  		if (index > -1) {
+  			list.splice(index, 1);
+  		}
+  	}
+  }
+
+
+  Ink.requireModules(['Ink.Dom.Selector_1','Ink.UI.DatePicker_1'],function(Selector, DatePicker){
+  	initialDatePicker = new DatePicker('#initialDate', {
+  		onSetDate: function() {
+  			if(initialDatePicker === undefined){
+  				return;
+  			}
+  			$scope.formData.initialDate.date.setFullYear(initialDatePicker.getDate().getFullYear());
+  			$scope.formData.initialDate.date.setMonth(initialDatePicker.getDate().getMonth());
+  			$scope.formData.initialDate.date.setDate(initialDatePicker.getDate().getDate()); 
+  		}  
+  	});
+  	finalDatePicker = new DatePicker('#finalDate', {
+  		onSetDate: function() {
+  			if(finalDatePicker === undefined){
+  				return;
+  			}
+  			$scope.formData.finalDate.date.setFullYear(finalDatePicker.getDate().getFullYear());
+  			$scope.formData.finalDate.date.setMonth(finalDatePicker.getDate().getMonth());
+  			$scope.formData.finalDate.date.setDate(finalDatePicker.getDate().getDate());
+  		}     
+  	});
+  });
+
+  Ink.requireModules( ['Ink.UI.FormValidator_2', 'Ink.Dom.Selector_1'], function(FormValidator, Selector){
+  	FormValidator.setRule('chooseKind', 'Select one option.', function(value){
+  		return $scope.formData.kind !== "";
+  	});
+
+  	FormValidator.setRule('chooseDate', 'Select a valid date.', function(value){
+  		return  $scope.formData.allDay || (!$scope.formData.allDay 
+  			&& $scope.formData.initialDate.hours !== "" 
+  			&& $scope.formData.initialDate.minutes !== ""
+  			&& $scope.formData.finalDate.hours !== "" 
+  			&& $scope.formData.finalDate.minutes !== "");
+  	});
+
+  	myValidator = new FormValidator('#myForm');
+  });
 });

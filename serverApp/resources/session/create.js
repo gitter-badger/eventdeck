@@ -21,7 +21,7 @@ function create(request, reply) {
     log.info({username: request.auth.credentials.id, session: newSession.id || newSession._id}, '[session] new session created');
     notification.notify(request.auth.credentials.id, 'session-'+session.id, 'created a new session', null);
 
-    reply({success: 'Session created.'});
+    reply({success: 'Session created.', _id: newSession._id});
   });
 
 }
